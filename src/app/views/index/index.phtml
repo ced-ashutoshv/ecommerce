@@ -57,9 +57,11 @@
         {
           title: "Site Links",
           links: [
-            { name: "Shop", url: "/shop" },
-            { name: "Cart", url: "/cart" },
-            { name: "Checkout", url: "/checkout" },
+            { name: "Product Add", url: "/add-product" },
+            { name: "Product List", url: "/product-list" },
+            { name: "Order Add", url: "/add-order" },
+            { name: "Order List", url: "/order-list" },
+            { name: "Settings", url: "/settings" },
           ],
         },
         {
@@ -129,7 +131,7 @@
             html.push(
               ...b.links.map(
                 (l) =>
-                  `<a class="bookmark" href="${l.url}" target="_blank">${l.name}</a>`
+                  `<a class="bookmark" href="${l.url}">${l.name}</a>`
               )
             );
             html.push("</div></div>");
@@ -149,18 +151,6 @@
         }, 100);
       };
 
-      document.addEventListener("keyup", (event) => {
-        if (event.keyCode == 32) {
-          // Spacebar code to open search
-          document.getElementById("search").style.display = "flex";
-          document.getElementById("search-field").focus();
-        } else if (event.keyCode == 27) {
-          // Esc to close search
-          document.getElementById("search-field").value = "";
-          document.getElementById("search-field").blur();
-          document.getElementById("search").style.display = "none";
-        }
-      });
     </script>
   </body>
 </html>
