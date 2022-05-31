@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #04AA6D;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<h3>Add Product Form</h3>
+
+<div class="container">
+  <form action="/add-product/validate" method="post">
+    <label for="pname">Product Name</label>
+    <input type="text" id="pname" name="productData[productname]" placeholder="Your Product name..">
+
+    <label for="pprice">Product price</label>
+    <input type="text" id="pprice" name="productData[pricename]" placeholder="Your Product price..">
+
+    <label for="ptag">Product tag</label>
+    <input type="text" id="ptag" name="productData[tagname]" placeholder="Your Product tag..">
+
+    <label for="ptag">Product stock</label>
+    <input type="text" id="ptag" name="productData[stock]" placeholder="Your Product stock..">
+
+    <label for="description">Product Description</label>
+    <textarea id="description" name="productData[description]" placeholder="Write something.." style="height:200px"></textarea>
+    <input type="submit" value="Submit">
+  </form>
+</div>
+
+</body>
+</html>
