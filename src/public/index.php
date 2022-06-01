@@ -6,6 +6,7 @@ use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
 use Phalcon\Url;
 use Phalcon\Config;
+use Phalcon\Db\Adapter\Pdo\Mysql;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
@@ -18,6 +19,13 @@ $loader->registerDirs(
     [
         APP_PATH . '/controllers/',
         APP_PATH . '/models/',
+    ]
+);
+
+// Register some classes
+$loader->registerFiles(
+    [
+        '../app/includes/helper.php',
     ]
 );
 
@@ -40,6 +48,20 @@ $container->set(
         $url = new Url();
         $url->setBaseUri('/');
         return $url;
+    }
+);
+
+$container->set(
+    'db',
+    function () {
+        return new Mysql(
+            [
+                'host'     => 'mysql-server',
+                'username' => 'root',
+                'password' => 'secret',
+                'dbname'   => 'ecommerce',
+            ]
+        );
     }
 );
 
