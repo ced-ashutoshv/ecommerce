@@ -6,6 +6,23 @@ use Phalcon\Mvc\Loader;
 
 class AddProductController extends Controller {
     public function indexAction() {
+        $request = new Request();
+        $pid     = $request->getQuery('pid');
+        $searchResults = Products::find(
+            [
+                'conditions' => 'id = :p_name:',
+                'bind'       => [
+                    'p_name' => $pid,
+                ]
+            ]
+        );
+
+        if ( count( $searchResults ) > 0 ) {
+            foreach ( $searchResults as $key => $product ) {
+                break;
+            }
+            $this->view->product = $product;
+        }
     }
 
     public function validateAction() {
@@ -41,58 +58,92 @@ class AddProductController extends Controller {
                         }
                     }
 
-                    // Search for the product already exists.
-                    $searchResults = Products::find(
-                        [
-                            'conditions' => 'name = :p_name:',
-                            'bind'       => [
-                                'p_name' => $formData['name'],
-                            ]
-                        ]
-                    );
+                    if ( ! empty( $formData['id'] ) ) {
+                        if ( false === $error ) {
+                            try {
+                                // Save and create new product now.
+                                $product = new Products();
 
-                    // Already exists.
-                    if ( count( $searchResults ) > 0 ) {
-                        foreach ( $searchResults as $key => $product ) {
-                            break;
+                                // Assign value from the form to $user.
+                                $product->assign(
+                                    $formData,
+                                    [
+                                        'id',
+                                        'name',
+                                        'price',
+                                        'tag',
+                                        'stock',
+                                        'description',
+                                    ]
+                                );
+
+                                $product->save();
+
+                            } catch (\Throwable $th) {
+                                $helper->sendErrorReport( '500', $th->getMessage(), $operation );
+                                return;
+                            }
+
+                            $successCode = 200;
+                            $message     = 'Selected Product updated';
+                            $id          = $product->id;
                         }
-                        
-                        $successCode = 409;
-                        $message     = 'Product already exists with same name. Try adding a different name or updating the product.';
-                        $id          = $product->id;
-                        $helper->sendSuccessReport( $successCode, $message, $operation, $id );
-                        return;
-                    }
 
-                    if ( false === $error ) {
-
-                        try {
-
-                            // Save and create new product now.
-                            $product = new Products();
-
-                            // Assign value from the form to $user.
-                            $product->assign(
-                                $formData,
-                                [
-                                    'name',
-                                    'price',
-                                    'tag',
-                                    'stock',
-                                    'description',
+                    } else { // Attempt creating new product.
+                        // Search for the product already exists.
+                        $searchResults = Products::find(
+                            [
+                                'conditions' => 'name = :p_name:',
+                                'bind'       => [
+                                    'p_name' => $formData['name'],
                                 ]
-                            );
+                            ]
+                        );
 
-                            $product->save();
-
-                        } catch (\Throwable $th) {
-                            $helper->sendErrorReport( '500', $th->getMessage(), $operation );
+                        // Already exists.
+                        if ( count( $searchResults ) > 0 ) {
+                            foreach ( $searchResults as $key => $product ) {
+                                break;
+                            }
+                            
+                            $successCode = 409;
+                            $message     = 'Product already exists with same name. Try adding a different name or updating the product.';
+                            $id          = $product->id;
+                            $helper->sendSuccessReport( $successCode, $message, $operation, $id );
                             return;
                         }
 
-                        $successCode = 200;
-                        $message     = 'New Product added';
-                        $id          = $product->id;
+                        if ( false === $error ) {
+
+                            try {
+
+                                // Save and create new product now.
+                                $product = new Products();
+
+                                // Assign value from the form to $user.
+                                $product->assign(
+                                    $formData,
+                                    [
+                                        'name',
+                                        'price',
+                                        'tag',
+                                        'stock',
+                                        'description',
+                                    ]
+                                );
+
+                                $product->save();
+
+                            } catch (\Throwable $th) {
+                                $helper->sendErrorReport( '500', $th->getMessage(), $operation );
+                                return;
+                            }
+
+                            $successCode = 200;
+                            $message     = 'New Product added';
+                            $id          = $product->id;
+                        }
+                        
                     }
                     break;
 
