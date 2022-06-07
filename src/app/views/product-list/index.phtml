@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Data Table</title>
     <style>
         .normal_wrapper::-webkit-scrollbar {
@@ -72,6 +73,8 @@
                 <th>Description</th>
                 <th>Tags</th>
                 <th>Stock</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -88,6 +91,8 @@
                             <td><?php echo ( $product->description ); ?></td>
                             <td><?php echo ( $product->tag ); ?></td>
                             <td><?php echo ( $product->stock ); ?></td>
+                            <th><a href="/add-product/?pid=<?php echo $product->id; ?>"><i class="material-icons" style="font-size:28px;color:green">edit</i></a></th>
+                            <th><a href="/product-list/delete/?pid=<?php echo $product->id; ?>"><i class="material-icons" style="font-size:28px;color:red">delete</i></a></th>
                         </tr>
                     <?php endforeach; ?>
             <?php endif; ?>
@@ -100,6 +105,8 @@
                 <th>Description</th>
                 <th>Tags</th>
                 <th>Stock</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </tfoot>
     </table>
