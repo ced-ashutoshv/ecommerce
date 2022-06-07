@@ -46,8 +46,17 @@ class AddProductController extends Controller {
             switch ($operation) {
                 case 'product':
                     foreach ( $formData as $key => $input ) {
+
+                        if ( 'id' === $key ) {
+                            continue;
+                        }
+
                         // Required fields that must be numeric.
-                        if ( in_array( $key, array( 'price', 'stock' ) ) && ! is_numeric( $input ) ) {
+                        if ( empty( $input ) ) {
+                            $error     = 'Bad Request. ' . $key . ' is not be empty';
+                            $errorCode = 400;
+                            break;
+                        } elseif ( in_array( $key, array( 'price', 'stock' ) ) && ! is_numeric( $input ) ) {
                             $error     = 'Invalid Datatype. Numeric value required for field ' . $key;
                             $errorCode = 401;
                             break;
@@ -145,11 +154,6 @@ class AddProductController extends Controller {
                         }
                         
                     }
-                    break;
-
-                case 'order':
-                    $errorCode = 404;
-                    $error     = 'Invalid Operation Performed';
                     break;
 
                 default:

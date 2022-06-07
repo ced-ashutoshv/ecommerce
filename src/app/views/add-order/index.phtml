@@ -6,7 +6,7 @@
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
 
-input[type=text], select, textarea {
+input[type=text],input[type=number], select, textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -41,25 +41,39 @@ input[type=submit]:hover {
 
 <h3>Add Order Form</h3>
 <div class="container">
-  <form action="/validate">
-    <label for="pname">Order Name</label>
-    <input type="text" id="pname" name="Ordername" placeholder="Your Order name..">
+  <form method="post" action="/add-order/validate">
 
-    <label for="pprice">Order price</label>
-    <input type="text" id="pprice" name="pricename" placeholder="Your Order price..">
+    <label for="cust_name">Customer Name</label>
+    <input type="text" id="cust_name" name="orderData[cust_name]" placeholder="Your Customer name..">
 
-    <label for="ptag">Order tag</label>
-    <input type="text" id="ptag" name="tagname" placeholder="Your Order tag..">
+    <label for="cust_addr">Customer Address</label>
+    <textarea id="cust_addr" name="orderData[cust_addr]" placeholder="Your Customer Address..." style="height:75px"></textarea>
 
-    <label for="ptag">Order stock</label>
-    <input type="text" id="ptag" name="tagname" placeholder="Your Order stock..">
+    <label for="cust_zipcode">Customer Zipcode</label>
+    <input type="text" id="cust_zipcode" name="orderData[cust_zipcode]" placeholder="Your Customer Zipcode..">
 
-    <label for="pprice">Order price</label>
-    <input type="text" id="pprice" name="pricename" placeholder="Your Order price..">
-
-    <label for="description">Order Description</label>
-    <textarea id="description" name="description" placeholder="Write something.." style="height:200px"></textarea>
-    <input type="submit" value="Submit">
+    <label for="order_status">Order status</label>
+    <select id="order_status" name="orderData[order_status]" id="order_status">
+      <option value="">Select a status</option>
+      <option value="pending">Pending</option>
+      <option value="processing">Processing</option>
+      <option value="completed">Completed</option>
+      <option value="refunded">Refunded</option>
+      <option value="cancelled">Cancelled</option>
+    </select>
+    <?php if ( ! empty( count( $products ) ) ) : ?>
+      <?php for ($i=1; $i <= count( $products ); $i++) : ?>
+        <label for="line_items">Order Line Items <?php echo $i;?></label>
+        <select name="orderData[line_items][id][<?php echo $i;?>]" id="line_items">
+          <option value="">Select a product</option>
+          <?php foreach ( $products as $key => $product ) : ?>
+            <option value="<?php echo $product->id; ?>"><?php echo $product->name; ?></option>
+          <?php endforeach; ?>
+        <select>
+        <input type="number" id="line_item_quantity" name="orderData[line_items][quantity][<?php echo $i;?>]" placeholder="Quantity..">
+      <?php endfor; ?>
+    <?php endif; ?>
+  <input type="submit" value="Submit">
   </form>
 </div>
 
