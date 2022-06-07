@@ -8,7 +8,7 @@ use Phalcon\Mvc\Loader;
 class AddOrderController extends Controller {
     public function indexAction() {
         $request = new Request();
-        $pid     = $request->getQuery('pid');
+        $pid     = $request->getQuery('o_id');
         $searchResults = Orders::find(
             [
                 'conditions' => 'id = :p_name:',
@@ -71,7 +71,7 @@ class AddOrderController extends Controller {
                             $error     = false;
                             $errorCode = false;
                             if ( is_array( $input ) ) {
-                                $formData[ $key ] = $helper->sanitize( serialize( $input ) );
+                                $formData[ $key ] = serialize( $input );
                             } else {
                                 $formData[ $key ] = $helper->sanitize( $input );
                             }

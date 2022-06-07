@@ -13,7 +13,7 @@ class OrderListController extends Controller {
 
         $request = new Request();
         $o_id     = $request->getQuery('o_id');
-        $searchResults = Products::find(
+        $searchResults = Orders::find(
             [
                 'conditions' => 'id = :o_id:',
                 'bind'       => [

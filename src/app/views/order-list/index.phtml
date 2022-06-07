@@ -72,6 +72,7 @@
                 <th>Customer Address</th>
                 <th>Customer Zipcode</th>
                 <th>Line Items</th>
+                <th>Order Status</th>
                 <th>Edit</th>
                 <th>Cancel</th>
             </tr>
@@ -86,12 +87,22 @@
                         <tr>
                             <td>#<?php echo ( $order->id ); ?></td>
                             <td><?php echo ( $order->cust_name ); ?></td>
-                            <td>$<?php echo ( $order->cust_addr ); ?></td>
-                            <td><?php echo ( $order->zipcode ); ?></td>
-                            <td><?php echo ( $order->line_items ); ?></td>
+                            <td><?php echo ( $order->cust_addr ); ?></td>
+                            <td><?php echo ( $order->cust_zipcode ); ?></td>
+                            <?php $order_lines = unserialize( $order->line_items ); ?>
+                            <td>
+                                <?php if ( count( $order_lines ) ) : ?>
+                                    <?php $helper = new Helper(); ?>
+                                    <?php foreach ( $order_lines['id'] as $key => $line ) : ?>
+                                        <ul>
+                                            <li><?php echo $line; ?> ( <?php echo $order_lines['quantity'][$key]; ?> Units )</li>
+                                        </ul>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </td>
                             <td><?php echo ( $order->status ); ?></td>
-                            <th><a href="/add-order/?pid=<?php echo $order->id; ?>"><i class="material-icons" style="font-size:28px;color:green">edit</i></a></th>
-                            <th><a href="/order-list/delete/?pid=<?php echo $order->id; ?>"><i class="material-icons" style="font-size:28px;color:red">delete</i></a></th>
+                            <th><a href="/add-order/?o_id=<?php echo $order->id; ?>"><i class="material-icons" style="font-size:28px;color:green">edit</i></a></th>
+                            <th><a href="/order-list/delete/?o_id=<?php echo $order->id; ?>"><i class="material-icons" style="font-size:28px;color:red">delete</i></a></th>
                         </tr>
                     <?php endforeach; ?>
             <?php endif; ?>
@@ -103,6 +114,7 @@
                 <th>Customer Address</th>
                 <th>Customer Zipcode</th>
                 <th>Line Items</th>
+                <th>Order Status</th>
                 <th>Edit</th>
                 <th>Cancel</th>
             </tr>
