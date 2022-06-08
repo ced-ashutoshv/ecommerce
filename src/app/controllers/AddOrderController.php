@@ -11,9 +11,9 @@ class AddOrderController extends Controller {
         $pid     = $request->getQuery('o_id');
         $searchResults = Orders::find(
             [
-                'conditions' => 'id = :p_name:',
+                'conditions' => 'id = :id:',
                 'bind'       => [
-                    'p_name' => $pid,
+                    'id' => $pid,
                 ]
             ]
         );
@@ -85,6 +85,9 @@ class AddOrderController extends Controller {
                                 // Save and create new order now.
                                 $order = new Orders();
 
+                                $formData['status'] = $formData['order_status'];
+                                unset( $formData['order_status'] );
+
                                 // Assign value from the form to $user.
                                 $order->assign(
                                     $formData,
@@ -93,7 +96,7 @@ class AddOrderController extends Controller {
                                         'cust_name',
                                         'cust_addr',
                                         'cust_zipcode',
-                                        'order_status',
+                                        'status',
                                         'line_items',
                                     ]
                                 );
