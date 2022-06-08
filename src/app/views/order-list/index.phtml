@@ -94,6 +94,9 @@
                                 <?php if ( count( $order_lines ) ) : ?>
                                     <?php $helper = new Helper(); ?>
                                     <?php foreach ( $order_lines['id'] as $key => $line_id ) : ?>
+                                        <?php if ( empty( $line_id ) ) {
+                                            continue;
+                                        } ?>
                                         <ul>
                                             <li><?php echo $helper->getProduct( $line_id ) ?? 'Product ID : ' . $line_id; ?> ( <?php echo $order_lines['quantity'][$key]; ?> Units )</li>
                                         </ul>

@@ -33,7 +33,7 @@ class Helper {
         $response->setJsonContent($contents)->send();
     }
 
-    public function getProduct( int $id = 0 ) {
+    public function getProduct( $id = 0 ) {
         $searchResults = Products::find(
             [
                 'conditions' => 'id = :p_id:',
