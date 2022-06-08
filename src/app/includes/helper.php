@@ -33,4 +33,23 @@ class Helper {
         $response->setJsonContent($contents)->send();
     }
 
+    public function getProduct( int $id = 0 ) {
+        $searchResults = Products::find(
+            [
+                'conditions' => 'id = :p_id:',
+                'bind'       => [
+                    'p_id' => $id,
+                ]
+            ]
+        );
+
+        // Already exists.
+        if ( count( $searchResults ) > 0 ) {
+            foreach ( $searchResults as $key => $product ) {
+                break;
+            }
+            return $product->name;
+        }
+        return false;
+    }
 }
