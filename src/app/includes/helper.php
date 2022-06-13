@@ -27,7 +27,7 @@ class Helper {
         // Getting a response instance.
         $response = new Response();
         $contents = [
-            $object => compact( 'id', 'code', 'message' )
+            $object => ! empty( $id ) ? compact( 'id', 'code', 'message' ) : compact( 'code', 'message' )
         ];
         
         $response->setJsonContent($contents)->send();
