@@ -121,6 +121,8 @@ class SettingsController extends Controller {
                     $helper->sendSuccessReport( $successCode, $message, $operation);
                 }
             }
+        } else {
+            $this->response->redirect('/');
         }
     }
 

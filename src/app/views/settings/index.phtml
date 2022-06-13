@@ -24,26 +24,26 @@
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputTitle">Title Optimization</label>
                                 <select class="form-control" id="inputTitle" name="settingsData[title]">
-                                    <option value="">Choose an option</option>
-                                    <option value="with_tags">With Tags</option>
-                                    <option value="without_tags">Without Tags</option>
+                                    <option <?php echo ( $settings->title == '' ? 'selected' : '' ); ?> value="">Choose an option</option>
+                                    <option <?php echo ( $settings->title == 'with_tags' ? 'selected' : '' ); ?> value="with_tags">With Tags</option>
+                                    <option <?php echo ( $settings->title == 'without_tags' ? 'selected' : '' ); ?> value="without_tags">Without Tags</option>
                                 </select>
                             </div>
                             <!-- Form Row-->
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputPrice">Default Price</label>
-                                    <input class="form-control" name="settingsData[price]" id="inputPrice" type="text" placeholder="Enter Default Price" value="">
+                                    <input class="form-control" value="<?php echo ( $settings->price ); ?>" name="settingsData[price]" id="inputPrice" type="text" placeholder="Enter Default Price" value="">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputStock">Default Stock</label>
-                                    <input class="form-control" name="settingsData[stock]" id="inputStock" type="text" placeholder="Enter Default Stock" value="">
+                                    <input class="form-control" value="<?php echo ( $settings->stock ); ?>" name="settingsData[stock]" id="inputStock" type="text" placeholder="Enter Default Stock" value="">
                                 </div>
                             </div>
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputZipcode">Default Zipcode</label>
-                                    <input class="form-control" name="settingsData[zipcode]" id="inputZipcode" type="text" placeholder="Enter Default Zipcode" value="">
+                                    <input class="form-control" value="<?php echo ( $settings->zipcode ); ?>" name="settingsData[zipcode]" id="inputZipcode" type="text" placeholder="Enter Default Zipcode" value="">
                                 </div>
                             </div>
                             <!-- Save changes button-->
