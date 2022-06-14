@@ -3,6 +3,8 @@ use Phalcon\Mvc\Controller;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Loader;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventsManager;
 
 class AddProductController extends Controller {
     public function indexAction() {
@@ -41,6 +43,14 @@ class AddProductController extends Controller {
             }
             
             $helper = new Helper();
+
+            $eventsManager = new EventsManager();
+            $eventsManager->attach(
+                'custom:checkProductData',
+                new QueryManager()
+            );
+
+            $formData = $eventsManager->fire( 'custom:checkProductData', $eventsManager, $formData );
 
             // Validate the data and check if data is valid then add the product else send a response 401.
             switch ($operation) {
@@ -168,7 +178,7 @@ class AddProductController extends Controller {
                 $helper->sendSuccessReport( $successCode, $message, $operation, $id );
             }
         } else {
-            $this->response->redirect( '/' );
+            $this->response->redirect( 'product-list/' );
         }
     }
 }

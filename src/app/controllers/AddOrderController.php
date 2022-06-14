@@ -4,6 +4,8 @@ use Phalcon\Mvc\Controller;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Loader;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventsManager;
 
 class AddOrderController extends Controller {
     public function indexAction() {
@@ -44,6 +46,14 @@ class AddOrderController extends Controller {
 
             $helper = new Helper();
 
+            $eventsManager = new EventsManager();
+            $eventsManager->attach(
+                'custom:checkOrderData',
+                new QueryManager()
+            );
+
+            $formData = $eventsManager->fire( 'custom:checkOrderData', $eventsManager, $formData );
+
             // Validate the data and check if data is valid then add the order else send a response 401.
             switch ( $operation ) {
                 case 'order':
@@ -62,8 +72,7 @@ class AddOrderController extends Controller {
                             $error     = 'Invalid Datatype. Numeric value required for field ' . $key;
                             $errorCode = 401;
                             break;
-                        }
-                        elseif ( in_array( $key, array( 'line_items' ) ) && ( false === is_array( $input ) ) ) {
+                        } elseif ( in_array( $key, array( 'line_items' ) ) && ( false === is_array( $input ) ) ) {
                             $error     = 'Invalid Datatype. Array value required for field ' . $key;
                             $errorCode = 401;
                             break;
@@ -165,7 +174,7 @@ class AddOrderController extends Controller {
                 $helper->sendSuccessReport( $successCode, $message, $operation, $id );
             }
         } else {
-            $this->response->redirect( '/' );
+            $this->response->redirect( 'order-list/' );
         }
     }
 }

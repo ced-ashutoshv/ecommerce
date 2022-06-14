@@ -26,6 +26,7 @@ $loader->registerDirs(
 $loader->registerFiles(
     [
         '../app/includes/helper.php',
+        '../app/includes/query-manager.php',
     ]
 );
 
