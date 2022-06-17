@@ -11,17 +11,25 @@ class Users extends Model
     public $username;
     public $email;
     public $password;
-    public $number;
+    public $phone;
 
     public static function get( array $meta = array() ) {
-        $searchResults = __CLASS__::find();
+        $searchResults = Users::find(
+            [
+                'conditions' => $meta['meta_key'] . ' = :meta_value:',
+                'bind'       => [
+                    'meta_value' => $meta['meta_value'],
+                ]
+            ]
+        );
 
         if ( count( $searchResults ) > 0 ) {
             foreach ( $searchResults as $key => $user ) {
                 break;
             }
 
-            return $user;
+            return $user ?? false;
         }
     }
+
 }

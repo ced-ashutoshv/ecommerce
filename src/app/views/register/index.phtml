@@ -1,94 +1,98 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8">
     <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
     <!--  All snippets are MIT license http://bootdey.com/license -->
     <title>Settings page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
-</head>
-<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body>
     <div class="container-xl px-4 mt-4">
-        <div class="row">
-            <div class="col-xl-8">
-                <!-- Account details card-->
-                <div class="card mb-4">
-                    <div class="card-header">Register User</div>
-                    <div class="card-body">
-                        <form action="/settings/validate" method="post">
-                            <!-- Form Row-->
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputfname">First Name</label>
-                                    <input class="form-control" value="<?php echo ( $user->fname ); ?>" name="userData[fname]" id="inputfname" type="text" placeholder="Enter First Name">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputlname">Last Name</label>
-                                    <input class="form-control" value="<?php echo ( $user->inputlname ); ?>" name="userData[inputlname]" id="inputlname" type="text" placeholder="Enter Last Name">
-                                </div>
-                            </div>
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputusername">Username</label>
-                                    <input class="form-control" value="<?php echo ( $user->username ); ?>" name="userData[username]" id="inputusername" type="text" placeholder="Enter Username">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputemail">Email</label>
-                                    <input class="form-control" value="<?php echo ( $user->email ); ?>" name="userData[email]" id="inputemail" type="text" placeholder="Enter Email">
-                                </div>
-                            </div>
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputpassword">Password</label>
-                                    <input class="form-control" value="<?php echo ( $user->password ); ?>" name="userData[password]" id="inputpassword" type="text" placeholder="Enter Password">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputcpassword">Confirm Password</label>
-                                    <input class="form-control" value="<?php echo ( $user->cpassword ); ?>" name="userData[cpassword]" id="inputcpassword" type="text" placeholder="Enter Confirm Password">
-                                </div>
-                            </div>
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-12">
-                                    <label class="small mb-1" for="inputphone">Phone Number</label>
-                                    <input class="form-control" value="<?php echo ( $user->phone ); ?>" name="userData[phone]" id="inputphone" type="text" placeholder="Enter Phone Number">
-                                </div>
-                            </div>
-                            <!-- Save changes button-->
-                            <button class="btn btn-primary" type="submit">Save changes</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+      <div class="row">
+        <div class="col-xl-8">
+          <!-- Account details card-->
+          <div class="card mb-4">
+            <div class="card-header">Register User</div>
+            <div class="card-body">
+              <form action="/register/validate" method="post">
 
+              <?php if ( ! empty( $user->id ) ) : ?>
+                <input type="hidden" value="<?php echo $user->id ?? ''; ?>" name="userData[id]">  
+              <?php endif; ?>
+
+                <!-- Form Row-->
+                <div class="row gx-3 mb-3">
+                  <div class="col-md-6">
+                    <label class="small mb-1" for="inputfname">First Name</label>
+                    <input class="form-control" value="<?php echo ( $user->fname ?? '' ); ?>" name="userData[fname]" id="inputfname" type="text" placeholder="Enter First Name">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="small mb-1" for="inputlname">Last Name</label>
+                    <input class="form-control" value="<?php echo ( $user->inputlname ?? '' ); ?>" name="userData[lname]" id="inputlname" type="text" placeholder="Enter Last Name">
+                  </div>
+                </div>
+                <div class="row gx-3 mb-3">
+                  <div class="col-md-6">
+                    <label class="small mb-1" for="inputusername">Username</label>
+                    <input class="form-control" value="<?php echo ( $user->username ?? '' ); ?>" name="userData[username]" id="inputusername" type="text" placeholder="Enter Username">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="small mb-1" for="inputemail">Email</label>
+                    <input class="form-control" value="<?php echo ( $user->email ?? '' ); ?>" name="userData[email]" id="inputemail" type="text" placeholder="Enter Email">
+                  </div>
+                </div>
+                <div class="row gx-3 mb-3">
+                  <div class="col-md-6">
+                    <label class="small mb-1" for="inputpassword">Password</label>
+                    <input class="form-control" value="<?php echo ( $user->password ?? '' ); ?>" name="userData[password]" id="inputpassword" type="text" placeholder="Enter Password">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="small mb-1" for="inputcpassword">Confirm Password</label>
+                    <input class="form-control" value="<?php echo ( $user->cpassword ?? '' ); ?>" name="userData[cpassword]" id="inputcpassword" type="text" placeholder="Enter Confirm Password">
+                  </div>
+                </div>
+                <div class="row gx-3 mb-3">
+                  <div class="col-md-12">
+                    <label class="small mb-1" for="inputphone">Phone Number</label>
+                    <input class="form-control" value="<?php echo ( $user->phone ?? '' ); ?>" name="userData[phone]" id="inputphone" type="text" placeholder="Enter Phone Number">
+                  </div>
+                </div>
+                <!-- Save changes button-->
+                <button class="btn btn-primary" type="submit">Save changes</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <style type="text/css">
-        body{
-            margin-top:20px;
-            background-color:#f2f6fc;
-            color:#69707a;
-        }
-        .form-control {
-            display: block;
-            width: 100%;
-            padding: 0.875rem 1.125rem;
-            font-size: 0.875rem;
-            font-weight: 400;
-            line-height: 1;
-            color: #69707a;
-            background-color: #fff;
-            background-clip: padding-box;
-            border: 1px solid #c5ccd6;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            border-radius: 0.35rem;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        }
+      body {
+        margin-top: 20px;
+        background-color: #f2f6fc;
+        color: #69707a;
+      }
+
+      .form-control {
+        display: block;
+        width: 100%;
+        padding: 0.875rem 1.125rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1;
+        color: #69707a;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #c5ccd6;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.35rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
     </style>
-</body>
+  </body>
 </html>
