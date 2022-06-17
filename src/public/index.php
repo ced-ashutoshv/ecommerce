@@ -7,6 +7,9 @@ use Phalcon\Mvc\Application;
 use Phalcon\Url;
 use Phalcon\Config;
 use Phalcon\Db\Adapter\Pdo\Mysql;
+use Phalcon\Di;
+use Phalcon\Session\Manager;
+use Phalcon\Session\Adapter\Stream;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
@@ -63,6 +66,24 @@ $container->set(
                 'dbname'   => 'ecommerce',
             ]
         );
+    }
+);
+
+$container->set(
+    'session',
+    function () {
+        $session = new Manager();
+        $files = new Stream(
+            [
+                'savePath' => '/tmp',
+            ]
+        );
+
+        $session
+            ->setAdapter($files)
+            ->start();
+
+        return $session;
     }
 );
 

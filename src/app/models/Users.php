@@ -13,15 +13,35 @@ class Users extends Model
     public $password;
     public $phone;
 
-    public static function get( array $meta = array() ) {
-        $searchResults = Users::find(
-            [
-                'conditions' => $meta['meta_key'] . ' = :meta_value:',
-                'bind'       => [
-                    'meta_value' => $meta['meta_value'],
-                ]
-            ]
-        );
+    public static function get( array $meta = array(), string $search = '' ) {
+
+        switch ($search) {
+            case 'username':
+                $args =  [
+                    'conditions' => 'username = :username: AND password = :password:',
+                    'bind'       => [
+                        'username' => $meta['username'],
+                        'password' => $meta['password'],
+                    ]
+                ];
+                break;
+            
+            case 'email':
+                $args =  [
+                    'conditions' => 'email = :email: AND password = :password:',
+                    'bind'       => [
+                        'email' => $meta['email'],
+                        'password' => $meta['password'],
+                    ]
+                ];
+                break;
+
+            default:
+                $args = array();
+                break;
+        }
+
+        $searchResults = Users::find( $args );
 
         if ( count( $searchResults ) > 0 ) {
             foreach ( $searchResults as $key => $user ) {
