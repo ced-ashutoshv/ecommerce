@@ -7,6 +7,17 @@ use Phalcon\Http\Response;
 class LoginController extends Controller {
 
     public function indexAction() {
+
+        $user_id = $this->di->get( 'session' )->get( 'userid' );
+        if ( ! empty( $user_id ) ) {
+          $user = Users::findFirst( $user_id );
+          $this->response->redirect( 'login/dashboard' );
+        }
+    }
+
+    public function dashboardAction()
+    {
+        # code...
     }
     
     public function validateAction() {
@@ -57,11 +68,9 @@ class LoginController extends Controller {
                 if ( ! empty( $user ) ) {
                     
                     // Save in session.
-                    $this->di->get( 'session' )->get( 'userid', $user->id );
-                    $this->di->get( 'session' )->get( 'logged_in_status', 'true' );
-                    $this->view->user = $user;
-                    $this->response->redirect( '/login' );
-
+                    $this->di->get( 'session' )->set( 'userid', $user->id );
+                    $this->di->get( 'session' )->set( 'logged_in_status', 'true' );
+                    $this->response->redirect( 'login/' );
                 } else {
                     $errorCode = 401;
                     $error = 'Credentials are not valid. Please try again.';
@@ -77,12 +86,13 @@ class LoginController extends Controller {
         
         } else {
 
-            $this->response->redirect( '/login' );
+            $this->response->redirect( 'login/' );
         }
     }
 
     public function logoutAction() {
         $this->di->get( 'session' )->destroy();
+        $this->response->redirect( 'login' );
     }
 
     public function isEmail($email) {
