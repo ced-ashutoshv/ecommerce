@@ -48,14 +48,14 @@ class RegisterController extends Controller {
                     'email' =>  $formData['email'],
                     'username'  =>  $formData['username'],
                 );
-    
+
                 $dupResult = $this->checkIfUserExists( $checkDuplicateData );
                 if ( false !== $dupResult ) {
                     $error = 'User already exists. Try a different ' . $dupResult . '.';
                     $errorCode = 409;
                 }
             }
-
+            
             // Data is correct.
             if ( false === $error ) {
                 // Updating User.
@@ -136,7 +136,7 @@ class RegisterController extends Controller {
     public function checkIfUserExists( $checkDuplicateData = array() ) {
 
         if ( empty( $checkDuplicateData ) ) return false;
-
+        
         $result = false;
         foreach ( $checkDuplicateData as $meta_key => $meta_value ) {
 

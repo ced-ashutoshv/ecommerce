@@ -37,7 +37,12 @@ class Users extends Model
                 break;
 
             default:
-                $args = array();
+                $args =  [
+                    'conditions' => $meta[ 'meta_key' ] . ' = :meta_value: ',
+                    'bind'       => [
+                        'meta_value' => $meta['meta_value'],
+                    ]
+                ];
                 break;
         }
 
