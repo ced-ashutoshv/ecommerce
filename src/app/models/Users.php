@@ -12,6 +12,7 @@ class Users extends Model
     public $email;
     public $password;
     public $phone;
+    public $role;
 
     public static function get( array $meta = array(), string $search = '' ) {
 

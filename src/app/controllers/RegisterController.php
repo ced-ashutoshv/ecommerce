@@ -75,6 +75,7 @@ class RegisterController extends Controller {
                                 'email',
                                 'password',
                                 'phone',
+                                'role'
                             ]
                         );
 
@@ -103,6 +104,7 @@ class RegisterController extends Controller {
                                 'email',
                                 'password',
                                 'phone',
+                                'role',
                             ]
                         );
 

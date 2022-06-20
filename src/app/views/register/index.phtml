@@ -20,9 +20,9 @@
             <div class="card-body">
               <form action="/register/validate" method="post">
 
-              <?php if ( ! empty( $user->id ) ) : ?>
-                <input type="hidden" value="<?php echo $user->id ?? ''; ?>" name="userData[id]">  
-              <?php endif; ?>
+                <?php if ( ! empty( $user->id ) ) : ?>
+                  <input type="hidden" value="<?php echo $user->id ?? ''; ?>" name="userData[id]">  
+                <?php endif; ?>
 
                 <!-- Form Row-->
                 <div class="row gx-3 mb-3">
@@ -56,9 +56,19 @@
                   </div>
                 </div>
                 <div class="row gx-3 mb-3">
-                  <div class="col-md-12">
+                  <div class="col-md-6">
                     <label class="small mb-1" for="inputphone">Phone Number</label>
                     <input class="form-control" value="<?php echo ( $user->phone ?? '' ); ?>" name="userData[phone]" id="inputphone" type="text" placeholder="Enter Phone Number">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="small mb-1" for="inputrole">User role</label>
+                    <select class="form-control" name="userData[role]" id="inputrole" placeholder="Enter User Role">
+                      <option <?php echo ( $user->role == '' ? 'selected' : '' ); ?> value="">Select a user role</option>
+                      <option <?php echo ( $user->role == 'admin' ? 'selected' : '' ); ?> value="admin">Admin</option>
+                      <option <?php echo ( $user->role == 'manager' ? 'selected' : '' ); ?> value="manager">Manager</option>
+                      <option <?php echo ( $user->role == 'customer' ? 'selected' : '' ); ?> value="customer">Customer</option>
+                      <option <?php echo ( $user->role == 'guest' ? 'selected' : '' ); ?> value="guest">Guest</option>
+                    </select>
                   </div>
                 </div>
                 <!-- Save changes button-->
