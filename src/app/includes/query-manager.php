@@ -50,7 +50,7 @@ class QueryManager {
             $acl = unserialize( file_get_contents( $aclFile ) );
 
             if( ! empty( $acl ) ) {
-                $role = "manager";
+                $role = "admin";
 
                 $request    = explode( '/', $request->getURI() );
                 $controller = $request[1] ?? '';
