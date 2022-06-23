@@ -10,6 +10,8 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Di;
 use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Stream;
+use Phalcon\Events\Event;
+use Phalcon\Events\Manager as EventsManager;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
@@ -88,6 +90,15 @@ $container->set(
 );
 
 $application = new Application($container);
+
+$eventsManager = new EventsManager();
+
+$eventsManager->attach(
+    'application:beforeHandleRequest',
+    new QueryManager()
+);
+
+$application->setEventsManager($eventsManager);
 
 try {
     // Handle the request

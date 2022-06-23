@@ -157,7 +157,7 @@ class AddOrderController extends Controller {
                             $message     = 'New Order added';
                             $id          = $order->id;
                         }
-                        
+
                     }
                     break;
 
@@ -170,7 +170,6 @@ class AddOrderController extends Controller {
             if ( ! empty( $error ) ) {
                 $helper->sendErrorReport( $errorCode, $error, $operation );
             } elseif ( ! empty( $message ) ) {
-
                 $helper->sendSuccessReport( $successCode, $message, $operation, $id );
             }
         } else {
