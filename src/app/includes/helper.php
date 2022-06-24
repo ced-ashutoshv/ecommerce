@@ -161,4 +161,30 @@ class Helper {
             ->setJsonContent($contents, JSON_PRETTY_PRINT, 512)
             ->send();
     }
+
+    public static function validateRequest( $request ){
+        
+        if ( empty( $request ) ) {
+            $err = new Exception( "Error Processing Request", 401 );
+            self::sendErrResponse( $err );
+            return;
+        }
+
+        $code        = 200;
+        $contentType = $request->getContentType();
+        $rawBody     = $request->getRawBody();
+        $bodyObject  = $request->getJsonRawBody();
+        $uri         = $request->getUri();
+        $method      = $request->getMethod();
+        $apiKey      = $request->getHeader( 'api_key' );
+        $isSecure    = $request->isSecure();
+
+        $content = compact( 'code', 'contentType', 'rawBody', 'bodyObject', 'uri', 'method', 'apiKey', 'isSecure' );
+
+        $response = new Response();
+
+        $response
+            ->setJsonContent($content, JSON_PRETTY_PRINT, 512)
+            ->send();
+    }
 }

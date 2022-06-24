@@ -8,8 +8,7 @@ class UsersController extends Controller {
 
     public function indexAction() {
         $request = new Request();
-
-        echo '<pre>'; print_r( $request ); echo '</pre>'; die;
+        $request = Helper::validateRequest( $request );
     }
 
     public function validateAction() {
@@ -130,7 +129,6 @@ class UsersController extends Controller {
             $this->response->redirect( '/register' );
         }
     }
-
 
     public function checkIfUserExists( $checkDuplicateData = array() ) {
 
