@@ -39,7 +39,7 @@ class QueryManager {
 
         $request = new Request();
 
-        if ( in_array( $request->getURI(), array('/','/login','/login/validate','/register/validate','/register', '/secure/build_acl') ) ) {
+        if ( in_array( $request->getURI(), array('/','/login','/login/validate','/register/validate','/register') ) || false !== strpos( $request->getURI(), '/secure' ) ) {
             return;
         }
 
@@ -61,7 +61,6 @@ class QueryManager {
                 } else {
                     // Getting a response instance
                     $response = new Response();
-
                     $response->setStatusCode(404, 'Not Found');
                     $response->setContent('<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden;background-color:#eed9aa}#shakemessage{background-color:#c72f43;padding:15px 25px;border-radius:5px;color:#fff;font-family:"Patua One",cursive;font-size:3em;line-height:1em;text-align:center;text-transform:uppercase}#shakemessage span{color:rgba(255,255,255,.4);font-size:.4em;line-height:1.2em;display:block;margin-top:10px}a{text-decoration:none}</style><a href="/"><h1 id="shakemessage">ERROR 404<span>Sorry, the page doesn\'t exist or you might not have access to it.</span></h1></a>');
                     $response->send();
