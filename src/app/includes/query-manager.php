@@ -39,7 +39,7 @@ class QueryManager {
 
         $request = new Request();
 
-        if ( in_array( $request->getURI(), array('/','/login','/register', '/secure/build_acl') ) ) {
+        if ( in_array( $request->getURI(), array('/','/login','/login/validate','/register/validate','/register', '/secure/build_acl') ) ) {
             return;
         }
 

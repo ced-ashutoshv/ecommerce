@@ -70,7 +70,7 @@ class LoginController extends Controller {
                     // Save in session.
                     $this->di->get( 'session' )->set( 'userid', $user->id );
                     $this->di->get( 'session' )->set( 'logged_in_status', 'true' );
-                    $this->response->redirect( 'login/' );
+                    $this->response->redirect( 'login' );
                 } else {
                     $errorCode = 401;
                     $error = 'Credentials are not valid. Please try again.';
@@ -86,7 +86,7 @@ class LoginController extends Controller {
         
         } else {
 
-            $this->response->redirect( 'login/' );
+            $this->response->redirect( 'login' );
         }
     }
 
