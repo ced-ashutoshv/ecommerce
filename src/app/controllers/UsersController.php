@@ -4,10 +4,12 @@ use Phalcon\Mvc\Controller;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 
-class RegisterController extends Controller {
+class UsersController extends Controller {
 
     public function indexAction() {
-        
+        $request = new Request();
+
+        echo '<pre>'; print_r( $request ); echo '</pre>'; die;
     }
 
     public function validateAction() {
@@ -36,11 +38,6 @@ class RegisterController extends Controller {
                     $errorCode = false;
                     $formData[ $key ] = $helper->sanitize( $input );
                 }
-            }
-
-            if ( $formData[ 'password' ] !== $formData[ 'cpassword' ] ) {
-                $error = 'Password Combination doesn\'t matched';
-                $errorCode = 401;
             }
 
             if ( false === $error ) {

@@ -143,4 +143,22 @@ class Helper {
 
         return true;
     }
+
+    public static function sendErrResponse( $exception = false ) {
+
+        if( ! $exception ) return;
+
+        $code    = $exception->getCode();
+        $message = $exception->getMessage();
+        $file    = $exception->getFile();
+        $line    = $exception->getLine();
+    
+        $contents = compact( 'code', 'message', 'line', 'file' );
+    
+        $response = new Response();
+        
+        $response
+            ->setJsonContent($contents, JSON_PRETTY_PRINT, 512)
+            ->send();
+    }
 }

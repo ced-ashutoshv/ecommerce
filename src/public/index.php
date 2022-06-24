@@ -10,6 +10,7 @@ use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Di;
 use Phalcon\Session\Manager;
 use Phalcon\Session\Adapter\Stream;
+use Phalcon\Http\Response;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventsManager;
 
@@ -93,10 +94,10 @@ $application = new Application($container);
 
 $eventsManager = new EventsManager();
 
-$eventsManager->attach(
-    'application:beforeHandleRequest',
-    new QueryManager()
-);
+// $eventsManager->attach(
+//     'application:beforeHandleRequest',
+//     new QueryManager()
+// );
 
 $application->setEventsManager($eventsManager);
 
@@ -108,5 +109,17 @@ try {
 
     $response->send();
 } catch (\Exception $e) {
-    echo 'Exception: ', $e->getMessage();
+
+    $code    = $e->getCode() * 100;
+    $message = $e->getMessage();
+    $file    = $e->getFile();
+    $line    = $e->getLine();
+
+    $contents = compact( 'code', 'message', 'line', 'file' );
+
+    $response = new Response();
+    
+    $response
+        ->setJsonContent($contents, JSON_PRETTY_PRINT, 512)
+        ->send();
 } 
