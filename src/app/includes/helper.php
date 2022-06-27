@@ -162,29 +162,22 @@ class Helper {
             ->send();
     }
 
-    public static function validateRequest( $request ){
+    public static function parseRequest( $request ){
         
         if ( empty( $request ) ) {
             $err = new Exception( "Error Processing Request", 401 );
             self::sendErrResponse( $err );
-            return;
+            die;
         }
 
         $code        = 200;
         $contentType = $request->getContentType();
-        $rawBody     = $request->getRawBody();
-        $bodyObject  = $request->getJsonRawBody();
+        $bodyObject  = $request->getRawBody();
         $uri         = $request->getUri();
         $method      = $request->getMethod();
         $apiKey      = $request->getHeader( 'api_key' );
         $isSecure    = $request->isSecure();
 
-        $content = compact( 'code', 'contentType', 'rawBody', 'bodyObject', 'uri', 'method', 'apiKey', 'isSecure' );
-
-        $response = new Response();
-
-        $response
-            ->setJsonContent($content, JSON_PRETTY_PRINT, 512)
-            ->send();
+        return compact( 'code', 'contentType', 'bodyObject', 'uri', 'method', 'apiKey', 'isSecure' );
     }
 }

@@ -8,7 +8,6 @@ use Phalcon\Http\Response;
  */
 class QueryManager {
     public function checkOrderData( $func, $managerObject = array(), $attr = array() ) {
-        
         if ( ! empty( $attr ) && is_array( $attr ) ) {
             $attr[ 'cust_zipcode' ] = ! empty( $attr[ 'cust_zipcode' ] ) ? $attr[ 'cust_zipcode' ] : Settings::get('zipcode');
         }
@@ -17,11 +16,8 @@ class QueryManager {
     }
 
     public function checkProductData( $func, $managerObject = array(), $attr = array() ) {
-        
         if ( ! empty( $attr ) && is_array( $attr ) ) {
-
             $title_pattern = Settings::get( 'title' );
-
             switch ($title_pattern) {
                 case 'with_tags':
                     $attr['name'] = $attr['name'] . ' ( ' . $attr['tag'] . ' ) ';
@@ -39,9 +35,9 @@ class QueryManager {
 
         $request = new Request();
 
-        if ( in_array( $request->getURI(), array('/','/login','/login/validate','/register/validate','/register') ) || false !== strpos( $request->getURI(), '/secure' ) ) {
-            return;
-        }
+        $ignoredEndpoints = array(
+
+        );
 
         $aclFile = APP_PATH . '/security/acl.cache';
 
@@ -50,14 +46,23 @@ class QueryManager {
             $acl = unserialize( file_get_contents( $aclFile ) );
 
             if( ! empty( $acl ) ) {
-                $role = "admin";
+                
+                $request = Helper::parseRequest( $request );
+                $api_key = $request['apiKey'] ?? false;
 
-                $request    = explode( '/', $request->getURI() );
-                $controller = $request[1] ?? '';
+                if ( empty( $api_key ) ) {
+                    $err = new Exception( "Authorization failed. Check your request again.", 403 );
+                    Helper::sendErrResponse( $err );
+                    die;
+                }
+
+                $crudManager = new CrudManager();
+                $role        = $crudManager->fetchRole( $api_key );
+
+                echo '<pre>'; print_r( $role ); echo '</pre>'; die;
 
                 if ( empty( $role ) || $acl->isAllowed( $role, $controller, '*' ) ) {
                     // Do nothing.
-                    
                 } else {
                     // Getting a response instance
                     $response = new Response();

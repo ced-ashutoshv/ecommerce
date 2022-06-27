@@ -33,6 +33,7 @@ $loader->registerFiles(
     [
         '../app/includes/helper.php',
         '../app/includes/query-manager.php',
+        '../app/includes/crud-manager.php',
     ]
 );
 
@@ -94,10 +95,10 @@ $application = new Application($container);
 
 $eventsManager = new EventsManager();
 
-// $eventsManager->attach(
-//     'application:beforeHandleRequest',
-//     new QueryManager()
-// );
+$eventsManager->attach(
+    'application:beforeHandleRequest',
+    new QueryManager()
+);
 
 $application->setEventsManager($eventsManager);
 
