@@ -15,27 +15,27 @@ class UsersController extends Controller {
             $api_key = $request['apiKey'] ?? false;
             if ( ! empty( $api_key ) ) {
 
-                $crudManager = new CrudManager();
+                $crudManager = new CrudManager( $request );
                 $method      = $request['method'] ?? 'GET';
                 switch ( $method ) {
                     case 'POST':
-                        $response =  $crudManager->processPost( $request );
+                        $response =  $crudManager->processPost();
                         break;
 
                     case 'PUT':
-                        $response =  $crudManager->processPut( $request );
+                        $response =  $crudManager->processPut();
                         break;
 
                     case 'PATCH':
-                        $response =  $crudManager->processPatch( $request );
+                        $response =  $crudManager->processPatch();
                         break;
 
                     case 'DELETE':
-                        $response =  $crudManager->processDelete( $request );
+                        $response =  $crudManager->processDelete();
                         break;
                     
                     default:
-                        $response =  $crudManager->processGet( $request );
+                        $response =  $crudManager->processGet();
                         break;
                 }
             }

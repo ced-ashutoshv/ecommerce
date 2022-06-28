@@ -3,23 +3,43 @@ use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 class CrudManager {
 
+    protected $request;
+
+    public function __construct( $request ){
+        $this->request = $request;
+    }
+
     /**
-     * Perform Get Request for all models.
+     * Perform GET Request for all models.
      */
-    public function processGet( $request ) {
+    public function processGet() {
         
-        $request = new Request();
-        $request = HttpManager::parseRequest( $request );
-        $body    = self::prepareBody( $request['bodyObject'] );
+        $body    = self::prepareBody( $this->request['bodyObject'] );
 
         // We will get array as a body now.
         if ( ! empty( $body ) ) {
             
-            $model = ucfirst(str_replace( '/', '', $request['uri'] )) ?? '';
+            $model = ucfirst(str_replace( '/', '', $this->request['uri'] )) ?? '';
             if( is_array( $body ) ) {
                 $model::get( $body );
             } else {
                 self::getAll( $model );
+            }
+        }
+    }
+
+    /**
+     * Perform POST Request for all models.
+     */
+    public function processPost() {
+        
+        $body    = self::prepareBody( $this->request['bodyObject'] );
+        // We will get array as a body now.
+        if ( ! empty( $body ) ) {
+            
+            $model = ucfirst(str_replace( '/', '', $this->request['uri'] )) ?? '';
+            if( is_array( $body ) ) {
+                $model::get( $body );
             }
         }
     }
