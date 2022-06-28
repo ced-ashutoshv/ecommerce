@@ -46,7 +46,7 @@ class CrudManager {
     }
 
     /**
-     * Perform POST Request for all models.
+     * Perform PATCH/PUT Request for all models.
      */
     public function processPatch() {
         
@@ -56,6 +56,38 @@ class CrudManager {
             $model = ucfirst(str_replace( '/', '', $this->request['uri'] )) ?? '';
             $object = new $model();
             $object->updateExisting( $this->request, $body );
+        } else {
+            $err = new Exception( 'Bad Request : Required params not found in the body', 301 );
+            HttpManager::sendErrResponse( $err );
+        }
+    }
+
+    /**
+     * Perform Delete Request for all models.
+     */
+    public function processDelete() {
+        
+        $body = self::prepareBody( $this->request['bodyObject'] );
+        // We will get array as a body now.
+        if ( ! empty( $body ) && is_array( $body ) ) {
+            $model = ucfirst(str_replace( '/', '', $this->request['uri'] )) ?? '';
+
+            if ( empty( $body['id'] ) || ! is_numeric( $body['id'] ) ) {
+                $err = new Exception( 'Bad Request : Required param ID not found in the body', 301 );
+                HttpManager::sendErrResponse( $err );  
+            }
+
+            $object = $model::findFirst('id = ' . $body['id'] );
+
+            if ( empty( $object ) ) {
+                $err = new Exception( 'No results found with this request', 404 );
+                return HttpManager::sendErrResponse( $err );
+            }
+
+            $object->delete();
+            $result  = new stdClass();
+            $result->message = 'Selected ' . $model . ' Deleted';
+            HttpManager::formatResponse( $result, 'Users' );
         } else {
             $err = new Exception( 'Bad Request : Required params not found in the body', 301 );
             HttpManager::sendErrResponse( $err );
