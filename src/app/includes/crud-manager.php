@@ -3,21 +3,31 @@ use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 class CrudManager {
 
+    /**
+     * Perform Get Request for all models.
+     */
     public function processGet( $request ) {
         
         $request = new Request();
         $request = HttpManager::parseRequest( $request );
-        $body    = $this->prepareBody( $request['bodyObject'] );
+        $body    = self::prepareBody( $request['bodyObject'] );
 
         // We will get array as a body now.
         if ( ! empty( $body ) ) {
-            $controller = ucfirst(str_replace( '/', '', $request['uri'] )) ?? '';
-            $result = $controller::get( $body );
-            echo '<pre>'; print_r( $result ); echo '</pre>';
+            
+            $model = ucfirst(str_replace( '/', '', $request['uri'] )) ?? '';
+            if( is_array( $body ) ) {
+                $model::get( $body );
+            } else {
+                self::getAll( $model );
+            }
         }
     }
 
-    function prepareBody( $body ) {
+    /**
+     * Check if body is valid or not and returns an array with same body.
+     */
+    public static function prepareBody( $body ) {
 
         // Decode the JSON data.
         $result = json_decode($body);
@@ -66,8 +76,29 @@ class CrudManager {
             $err = new Exception( $error, 500 );
             HttpManager::sendErrResponse( $err );
         }
+        elseif ( new stdClass() == $result ) {
+            return 'all';
+        }
 
         // Everything is OK.
         return (array) $result;
+    }
+
+    public function getAll( string $model ) {
+        $queryResult = $model::find([
+            'order' => 'id'
+        ]);
+
+        if ( empty( $queryResult ) ) {
+            $err = new Exception( 'No results found with this request', 404 );
+            return HttpManager::sendErrResponse( $err );
+        } else {
+            $result = new stdClass();
+            foreach ( $queryResult as $key => $user ) {
+                $result->$key =  $user;
+            }
+
+            return HttpManager::formatResponse( $result, 'Users' ) ?? false;
+        }
     }
 }
