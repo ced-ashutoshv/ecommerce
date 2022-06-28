@@ -27,7 +27,7 @@ class Users extends Model {
     );
 
     // Search for single or all users.
-    public static function get( array $meta = array(), string $search = '' ) {
+    public static function get( array $meta = array(), string $search = '', bool $returnResult = false ) {
 
         switch ($search) {
             case 'username':
@@ -66,6 +66,8 @@ class Users extends Model {
             foreach ( $searchResults as $key => $user ) {
                 break;
             }
+
+            if( true === $returnResult ) return $user;
             return HttpManager::formatResponse( $user, 'Users' ) ?? false;
         } else {
             $err = new Exception( 'No results found with this request', 404 );
@@ -73,7 +75,7 @@ class Users extends Model {
         }
     }
 
-    public function createUser( array $request, array $body ) {
+    public function createNew( array $request, array $body ) {
         if ( ! empty( $body ) ) {
             // Check if primary keys are already in database. If exists die!
             $this->restrictDuplicates( $body );
@@ -126,6 +128,40 @@ class Users extends Model {
 
             HttpManager::formatResponse( $this, 'Users' );
 
+        }
+    }
+
+    public function updateExisting( array $request, array $body ) {
+
+        if ( empty( $body['id'] ) ) {
+            $err = new Exception( 'Required value not found in request. Add field name : id', 400 );
+            HttpManager::sendErrResponse( $err );
+        }
+
+        $args = array(
+            'meta_key' => 'id',
+            'meta_value' => $body['id'],
+        );
+        
+        $result = self::get( $args, '', true );
+
+        if( ! empty( $result ) ) {
+            $result->assign(
+                $body,
+                [
+                    'fname',
+                    'lname',
+                    'username',
+                    'email',
+                    'password',
+                    'phone',
+                    'role',
+                ]
+            );
+
+            $result->save();
+
+            HttpManager::formatResponse( $result, 'Users' );
         }
     }
 

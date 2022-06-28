@@ -38,7 +38,24 @@ class CrudManager {
         if ( ! empty( $body ) && is_array( $body ) ) {
             $model = ucfirst(str_replace( '/', '', $this->request['uri'] )) ?? '';
             $object = new $model();
-            $object->createUser( $this->request, $body );
+            $object->createNew( $this->request, $body );
+        } else {
+            $err = new Exception( 'Bad Request : Required params not found in the body', 301 );
+            HttpManager::sendErrResponse( $err );
+        }
+    }
+
+    /**
+     * Perform POST Request for all models.
+     */
+    public function processPatch() {
+        
+        $body = self::prepareBody( $this->request['bodyObject'] );
+        // We will get array as a body now.
+        if ( ! empty( $body ) && is_array( $body ) ) {
+            $model = ucfirst(str_replace( '/', '', $this->request['uri'] )) ?? '';
+            $object = new $model();
+            $object->updateExisting( $this->request, $body );
         } else {
             $err = new Exception( 'Bad Request : Required params not found in the body', 301 );
             HttpManager::sendErrResponse( $err );
