@@ -30,51 +30,5 @@ class QueryManager {
 
         return $attr;
     }
-
-    public function beforeHandleRequest( $func, $managerObject = array(), $attr = array() ) {
-
-        $request = new Request();
-
-        $ignoredEndpoints = array(
-
-        );
-
-        $aclFile = APP_PATH . '/security/acl.cache';
-
-        if( true === is_file( $aclFile ) ) {
-
-            $acl = unserialize( file_get_contents( $aclFile ) );
-
-            if( ! empty( $acl ) ) {
-                
-                $request = Helper::parseRequest( $request );
-                $api_key = $request['apiKey'] ?? false;
-
-                if ( empty( $api_key ) ) {
-                    $err = new Exception( "Authorization failed. Check your request again.", 403 );
-                    Helper::sendErrResponse( $err );
-                    die;
-                }
-
-                $crudManager = new CrudManager();
-                $role        = $crudManager->fetchRole( $api_key );
-
-                echo '<pre>'; print_r( $role ); echo '</pre>'; die;
-
-                if ( empty( $role ) || $acl->isAllowed( $role, $controller, '*' ) ) {
-                    // Do nothing.
-                } else {
-                    // Getting a response instance
-                    $response = new Response();
-                    $response->setStatusCode(404, 'Not Found');
-                    $response->setContent('<style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;overflow:hidden;background-color:#eed9aa}#shakemessage{background-color:#c72f43;padding:15px 25px;border-radius:5px;color:#fff;font-family:"Patua One",cursive;font-size:3em;line-height:1em;text-align:center;text-transform:uppercase}#shakemessage span{color:rgba(255,255,255,.4);font-size:.4em;line-height:1.2em;display:block;margin-top:10px}a{text-decoration:none}</style><a href="/"><h1 id="shakemessage">ERROR 404<span>Sorry, the page doesn\'t exist or you might not have access to it.</span></h1></a>');
-                    $response->send();
-                    die;
-                }
-            } else {
-                die( 'Configuration not found' );
-            }
-        }
-    }
 }
 ?>

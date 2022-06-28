@@ -34,6 +34,7 @@ $loader->registerFiles(
         '../app/includes/helper.php',
         '../app/includes/query-manager.php',
         '../app/includes/crud-manager.php',
+        '../app/includes/auth-manager.php',
     ]
 );
 
@@ -97,7 +98,7 @@ $eventsManager = new EventsManager();
 
 $eventsManager->attach(
     'application:beforeHandleRequest',
-    new QueryManager()
+    new AuthManager()
 );
 
 $application->setEventsManager($eventsManager);
