@@ -85,12 +85,12 @@ class AuthManager {
         return $user_role;
     }
 
-    public static function create( $user_id = '' ){
+    public static function create( $user_id = '', $role = '' ){
 
         // Defaults to 'sha512'
         $signer  = new Hmac();
-        $user_id = $user_id ?? '1';
-        $role    = $role ?? 'admin';
+        $user_id = $user_id ?? '';
+        $role    = $role ?? '';
 
         // Builder object
         $builder = new Builder($signer);

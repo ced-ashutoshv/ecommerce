@@ -33,14 +33,15 @@ class CrudManager {
      */
     public function processPost() {
         
-        $body    = self::prepareBody( $this->request['bodyObject'] );
+        $body = self::prepareBody( $this->request['bodyObject'] );
         // We will get array as a body now.
-        if ( ! empty( $body ) ) {
-            
+        if ( ! empty( $body ) && is_array( $body ) ) {
             $model = ucfirst(str_replace( '/', '', $this->request['uri'] )) ?? '';
-            if( is_array( $body ) ) {
-                $model::get( $body );
-            }
+            $object = new $model();
+            $object->createUser( $this->request, $body );
+        } else {
+            $err = new Exception( 'Bad Request : Required params not found in the body', 301 );
+            HttpManager::sendErrResponse( $err );
         }
     }
 
@@ -91,7 +92,6 @@ class CrudManager {
     
         if ( $error !== '' ) {
             // throw the Exception or exit // or whatever :)
-
             $error .= ' Check request body again.';
             $err = new Exception( $error, 500 );
             HttpManager::sendErrResponse( $err );

@@ -19,23 +19,23 @@ class UsersController extends Controller {
                 $method      = $request['method'] ?? 'GET';
                 switch ( $method ) {
                     case 'POST':
-                        $response =  $crudManager->processPost();
+                        $crudManager->processPost();
                         break;
 
                     case 'PUT':
-                        $response =  $crudManager->processPut();
+                        $crudManager->processPut();
                         break;
 
                     case 'PATCH':
-                        $response =  $crudManager->processPatch();
+                        $crudManager->processPatch();
                         break;
 
                     case 'DELETE':
-                        $response =  $crudManager->processDelete();
+                        $crudManager->processDelete();
                         break;
                     
                     default:
-                        $response =  $crudManager->processGet();
+                        $crudManager->processGet();
                         break;
                 }
             }
