@@ -145,10 +145,15 @@ class Users extends Model {
         
         $result = self::get( $args, '', true );
 
-        if( ! empty( $result ) ) {
-            $result->assign(
-                $body,
-                [
+        $method = $request['method'] ?? 'PATCH';
+
+        switch ($method) {
+            case 'PUT':
+                $keyToBeUpdated = array_keys( $body );
+                break;
+            
+            default:
+                $keyToBeUpdated = array( 
                     'fname',
                     'lname',
                     'username',
@@ -156,7 +161,14 @@ class Users extends Model {
                     'password',
                     'phone',
                     'role',
-                ]
+                );
+                break;
+        }
+
+        if( ! empty( $result ) ) {
+            $result->assign(
+                $body,
+                $keyToBeUpdated
             );
 
             $result->save();

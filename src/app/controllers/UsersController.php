@@ -23,9 +23,6 @@ class UsersController extends Controller {
                         break;
 
                     case 'PUT':
-                        $crudManager->processPut();
-                        break;
-
                     case 'PATCH':
                         $crudManager->processPatch();
                         break;
