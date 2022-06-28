@@ -10,7 +10,7 @@ class IndexController {
         try {
             throw new Exception("Invalid Request Url", 404);
         } catch (\Throwable $th) {
-            Helper::sendErrResponse( $th );
+            HttpManager::sendErrResponse( $th );
         }
     }
 }

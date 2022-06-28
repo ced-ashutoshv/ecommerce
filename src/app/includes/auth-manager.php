@@ -33,19 +33,19 @@ class AuthManager {
 
             if( ! empty( $acl ) ) {
                 
-                $request = Helper::parseRequest( $request );
+                $request = HttpManager::parseRequest( $request );
                 $api_key = $request['apiKey'] ?? false;
 
                 if ( empty( $api_key ) ) {
                     $err = new Exception( "Authorization failed. Check your request headers again.", 403 );
-                    Helper::sendErrResponse( $err );
+                    HttpManager::sendErrResponse( $err );
                 }
 
                 $role = $this->doAuthCheck( $api_key );
 
                 if ( empty( $role ) ) {
                     $err = new Exception( 'You don\'t have permission to access this resource', 301 );
-                    Helper::sendErrResponse( $err );
+                    HttpManager::sendErrResponse( $err );
                 } else {
                     // Got a role now check if we have access for the request in acl.
                     $uri = $request['uri'] ? array_filter( explode( '/', $request['uri'] ) ) : '';
@@ -55,7 +55,7 @@ class AuthManager {
                             return true;
                         } else {
                             $err = new Exception( 'You don\'t have enough permission to access this resource.', '301' );
-                            Helper::sendErrResponse( $err );
+                            HttpManager::sendErrResponse( $err );
                         }
                     } else {
                         return;
@@ -63,11 +63,11 @@ class AuthManager {
                 }
             } else {
                 $err = new Exception( 'Configuration not found', '301' );
-                Helper::sendErrResponse( $err );
+                HttpManager::sendErrResponse( $err );
             }
         } else {
             $err = new Exception( 'Configuration File not found', '301' );
-            Helper::sendErrResponse( $err );
+            HttpManager::sendErrResponse( $err );
         }
     }
 
@@ -78,7 +78,7 @@ class AuthManager {
 
         if ( false === $user_role ) {
             $err = new Exception( "Attached API Key in request is Expired or Incorrect", 403 );
-            Helper::sendErrResponse( $err );
+            HttpManager::sendErrResponse( $err );
         }
 
         // Token Key is valid and we got the role now.
@@ -123,7 +123,7 @@ class AuthManager {
         
         if ( empty( $tokenReceived ) ) {
             $err = new Exception("Error Processing Request. Token Not found in request", 1);
-            Helper::sendErrResponse( $err );
+            HttpManager::sendErrResponse( $err );
         }
 
         $searchResults = Users::find(
@@ -144,7 +144,7 @@ class AuthManager {
 
         if ( empty( $user ) ) {
             $err = new Exception( "No user found with attached API Key Not found in request" );
-            Helper::sendErrResponse( $err );
+            HttpManager::sendErrResponse( $err );
         }
 
         $id = $user->id ?? '';

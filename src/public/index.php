@@ -31,7 +31,7 @@ $loader->registerDirs(
 // Register some classes
 $loader->registerFiles(
     [
-        '../app/includes/helper.php',
+        '../app/includes/http-manager.php',
         '../app/includes/query-manager.php',
         '../app/includes/crud-manager.php',
         '../app/includes/auth-manager.php',
