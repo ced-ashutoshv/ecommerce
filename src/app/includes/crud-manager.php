@@ -166,8 +166,16 @@ class CrudManager {
             return HttpManager::sendErrResponse( $err );
         } else {
             $result = new stdClass();
-            foreach ( $queryResult as $key => $user ) {
-                $result->$key =  $user;
+            foreach ( $queryResult as $key => $single ) {
+                
+                // In case of orders unserialise the line items.
+                switch ($model) {
+                    case 'Orders':
+                        $single->line_items = $model::formatLineItems( $single->line_items );
+                        break;
+                }
+
+                $result->$key =  $single;
             }
 
             return HttpManager::formatResponse( $result, $model ) ?? false;

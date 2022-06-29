@@ -21,8 +21,9 @@ class BuildaclController {
             $acl->addRole( 'customer' );
             $acl->addRole( 'guest' );
 
-            $users = new Component('users', 'Users');
+            $users    = new Component('users', 'Users');
             $products = new Component('products', 'Products');
+            $orders   = new Component('orders', 'Orders');
 
             $acl->addComponent(
                 $users,
@@ -38,6 +39,12 @@ class BuildaclController {
                 ]
             );
 
+            $acl->addComponent(
+                $orders,
+                [
+                    '*',
+                ]
+            );
 
             // Users access.
             $acl->allow( 'admin', 'users', '*' );
@@ -49,6 +56,12 @@ class BuildaclController {
             $acl->allow( 'admin', 'products', '*' );
             $acl->allow( 'manager', 'products', '*' );
             $acl->deny( 'customer', 'products', '*' );
+            $acl->deny( 'guest', '*', '*' );
+
+            // Orders access.
+            $acl->allow( 'admin', 'orders', '*' );
+            $acl->allow( 'manager', 'orders', '*' );
+            $acl->allow( 'customer', 'orders', '*' );
             $acl->deny( 'guest', '*', '*' );
  
             $result = file_put_contents(
