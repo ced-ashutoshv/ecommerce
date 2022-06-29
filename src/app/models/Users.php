@@ -19,7 +19,7 @@ class Users extends Model {
         'username',
     );
 
-    const SEARCH = array( 
+    const REQUIRED = array( 
         'id',
         'email',
         'api_key',

@@ -87,7 +87,7 @@ class CrudManager {
             $object->delete();
             $result  = new stdClass();
             $result->message = 'Selected ' . $model . ' Deleted';
-            HttpManager::formatResponse( $result, 'Users' );
+            HttpManager::formatResponse( $result, $model );
         } else {
             $err = new Exception( 'Bad Request : Required params not found in the body', 301 );
             HttpManager::sendErrResponse( $err );
@@ -153,6 +153,9 @@ class CrudManager {
         return (array) $result;
     }
 
+    /**
+     * Get all entries of this db model.
+     */
     public function getAll( string $model ) {
         $queryResult = $model::find([
             'order' => 'id'
@@ -167,7 +170,7 @@ class CrudManager {
                 $result->$key =  $user;
             }
 
-            return HttpManager::formatResponse( $result, 'Users' ) ?? false;
+            return HttpManager::formatResponse( $result, $model ) ?? false;
         }
     }
 }

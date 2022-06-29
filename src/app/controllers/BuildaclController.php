@@ -22,6 +22,7 @@ class BuildaclController {
             $acl->addRole( 'guest' );
 
             $users = new Component('users', 'Users');
+            $products = new Component('products', 'Products');
 
             $acl->addComponent(
                 $users,
@@ -30,10 +31,24 @@ class BuildaclController {
                 ]
             );
 
+            $acl->addComponent(
+                $products,
+                [
+                    '*',
+                ]
+            );
+
+
             // Users access.
             $acl->allow( 'admin', 'users', '*' );
             $acl->deny( 'manager', 'users', '*' );
             $acl->deny( 'customer', 'users', '*' );
+            $acl->deny( 'guest', '*', '*' );
+
+            // Products access.
+            $acl->allow( 'admin', 'products', '*' );
+            $acl->allow( 'manager', 'products', '*' );
+            $acl->deny( 'customer', 'products', '*' );
             $acl->deny( 'guest', '*', '*' );
  
             $result = file_put_contents(
@@ -44,5 +59,7 @@ class BuildaclController {
         } else {
             $acl = file_get_contents( $aclFile );
         }
+
+        return $acl ?? '';
     }
 }
