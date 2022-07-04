@@ -32,7 +32,7 @@ class AuthManager {
             $acl = unserialize( file_get_contents( $aclFile ) );
 
             if( ! empty( $acl ) ) {
-                
+
                 $request = HttpManager::parseRequest( $request );
                 $api_key = $request['apiKey'] ?? false;
 
