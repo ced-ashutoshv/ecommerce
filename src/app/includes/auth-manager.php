@@ -10,13 +10,15 @@ use Phalcon\Security\JWT\Signer\Hmac;
 use Phalcon\Security\JWT\Token\Parser;
 use Phalcon\Security\JWT\Validator;
 
+// Firebase jwt.
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class AuthManager {
 
     public function beforeHandleRequest( $func, $managerObject = array(), $attr = array() ) {
 
         $request = new Request();
-
         $ignoredEndpoints = array(
             '/buildacl',
         );
@@ -71,10 +73,9 @@ class AuthManager {
         }
     }
 
-
     public function doAuthCheck( string $apiKey = null ) {
 
-        $user_role = $this->validateApiKey( $apiKey ); // Returns role or bool ( false ).
+        $user_role = $this->validateFirebaseApiKey( $apiKey ); // Returns role or bool ( false ).
 
         if ( false === $user_role ) {
             $err = new Exception( "Attached API Key in request is Expired or Incorrect", 403 );
@@ -182,6 +183,64 @@ class AuthManager {
             ;
         } catch (\Throwable $th) {
             return false;
+        }
+
+        return $user->role;
+    }
+
+    public static function createFirebaseAuth( $user_id = '', $role = '' ) {
+
+        $now        = new DateTimeImmutable();
+        $issued     = $now->getTimestamp();
+        $notBefore  = $now->modify('-1 minute')->getTimestamp();
+        $expires    = $now->modify('+1 day')->getTimestamp();
+        $payload = [
+            'iss' => 'https://phalcon.io', // Issuer
+            'aud' => 'http://localhost:8080/', // Audience
+            'iat' => 1356999524,
+            'nbf' => 1357000000,
+            'user_id' => $user_id,
+            'user_role' => $role,
+        ];
+
+        return JWT::encode($payload, APP_SECRET, 'HS256');
+    }
+
+    public function validateFirebaseApiKey( $tokenReceived = false ) {
+        
+        if ( empty( $tokenReceived ) ) {
+            $err = new Exception("Error Processing Request. Token Not found in request", 1);
+            HttpManager::sendErrResponse( $err );
+        }
+
+        $searchResults = Users::find(
+            [
+                'conditions' => 'api_key = :api_key:',
+                'bind'       => [
+                    'api_key' => $tokenReceived,
+                ]
+            ]
+        );
+
+        // Already exists.
+        if ( count( $searchResults ) > 0 ) {
+            foreach ( $searchResults as $key => $user ) {
+                break;
+            }
+        }
+
+        if ( empty( $user ) ) {
+            $err = new Exception( "No user found with attached API Key Not found in request" );
+            HttpManager::sendErrResponse( $err );
+        }
+
+        $id = $user->id ?? '';
+
+        // Throw exceptions if those do not validate
+        try {
+            JWT::decode($tokenReceived, new Key( APP_SECRET, 'HS256'));
+        } catch (\Throwable $th) {
+            HttpManager::sendErrResponse( $th );
         }
 
         return $user->role;

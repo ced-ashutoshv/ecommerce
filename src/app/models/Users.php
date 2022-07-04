@@ -102,7 +102,7 @@ class Users extends Model {
 
                 $this->save();
 
-                $body['api_key'] = AuthManager::create( $this->id, $this->role );
+                $body['api_key'] = AuthManager::createFirebaseAuth( $this->id, $this->role );
                 $body['id']      = $this->id;
 
                 $this->assign(

@@ -15,8 +15,9 @@ use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventsManager;
 
 // Define some absolute path constants to aid in locating resources
-define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');
+define( 'BASE_PATH', dirname(__DIR__) );
+define( 'APP_PATH', BASE_PATH . '/app' );
+define( 'APP_SECRET', 'NFx5T1Tj5HyVfFarXxtORuAdidsKHuZGvhkjE4De6nZ0YcSDq0E7Xuh6fa2X7l3f' );
 
 // Register an autoloader
 $loader = new Loader();
