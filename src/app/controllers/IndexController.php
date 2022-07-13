@@ -11,7 +11,11 @@ use Phalcon\Translate\TranslateFactory;
 
 class IndexController extends Controller {
 
+    protected $cache;
     public function indexAction() {
+
+        $this->cache = $this->di->get( 'cache' );
+
         $translation         = $this->getTranslator();
         $this->view->myName  = $translation->query( 'name' );
         $this->view->appName = $translation->query( 'app' );
