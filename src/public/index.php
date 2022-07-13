@@ -35,6 +35,7 @@ $loader->registerFiles(
         '../app/includes/http-manager.php',
         '../app/includes/query-manager.php',
         '../app/includes/crud-manager.php',
+        '../app/includes/cache-manager.php',
         '../app/includes/auth-manager.php',
         '../app/bin/vendor/autoload.php',
     ]
@@ -50,6 +51,14 @@ $container->set(
         $view = new View();
         $view->setViewsDir(APP_PATH . '/views/');
         return $view;
+    }
+);
+
+$container->set(
+    'cache',
+    function () {
+        $cache = new CacheManager();
+        return $cache->init();
     }
 );
 
