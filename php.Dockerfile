@@ -4,6 +4,10 @@ ARG PSR_VERSION=0.7.0
 ARG PHALCON_VERSION=4.1.2
 ARG PHALCON_EXT_PATH=php7/64bits
 
+RUN pecl install -o -f redis \ 
+&& rm -rf /tmp/pear \
+$$ docker-php-ext-enable redis
+
 RUN set -xe && \
     # Download PSR, see https://github.com/jbboehr/php-psr
     curl -LO https://github.com/jbboehr/php-psr/archive/v${PSR_VERSION}.tar.gz && \
