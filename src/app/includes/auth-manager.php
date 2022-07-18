@@ -21,9 +21,10 @@ class AuthManager {
         $request = new Request();
         $ignoredEndpoints = array(
             '/buildacl',
+            '/weather',
         );
 
-        if ( in_array( $request->getUri(), $ignoredEndpoints ) ) {
+        if ( in_array( $request->getUri(), $ignoredEndpoints ) || false !== strpos( $request->getUri(),'weather' ) ) {
             return true;
         }
 
@@ -34,7 +35,6 @@ class AuthManager {
             $acl = unserialize( file_get_contents( $aclFile ) );
 
             if( ! empty( $acl ) ) {
-
                 $request = HttpManager::parseRequest( $request );
                 $api_key = $request['apiKey'] ?? false;
 
