@@ -143,7 +143,9 @@ class WeatherController extends Controller {
                     $cricket  = $report['cricket'] ?? array();
                     $golf     = $report['golf'] ?? array();
 
-                    if ( ! empty( $football ) ) : 
+                    if ( ! empty( $football ) ) : ?>
+                        <strong>FootBall</strong><br>
+                        <?php
                         $football = array_slice( $football, 0, 5 );
                         foreach ( $football as $key => $match ) : ?>
                             <small><?php echo $match[ 'stadium' ]; ?> : <?php echo $match[ 'match' ]; ?></small>
@@ -151,7 +153,9 @@ class WeatherController extends Controller {
                         <?php
                         endforeach;
                     endif;
-                    if ( ! empty( $cricket ) ) : 
+                    if ( ! empty( $cricket ) ) : ?>
+                        <strong>Cricket</strong><br>
+                        <?php
                         $cricket = array_slice( $cricket, 0, 5 );
                         foreach ( $cricket as $key => $match ) : ?>
                             <small><?php echo $match[ 'stadium' ]; ?> : <?php echo $match[ 'match' ]; ?></small>
@@ -159,7 +163,9 @@ class WeatherController extends Controller {
                         <?php
                         endforeach;
                     endif;
-                    if ( ! empty( $golf ) ) : 
+                    if ( ! empty( $golf ) ) : ?>
+                        <strong>Golf</strong><br>
+                        <?php
                         $golf = array_slice( $golf, 0, 5 );
                         foreach ( $golf as $key => $match ) : ?>
                             <small><?php echo $match[ 'stadium' ]; ?> : <?php echo $match[ 'match' ]; ?></small>
