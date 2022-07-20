@@ -40,7 +40,7 @@
                         <div class="d-flex flex-column block first-block">
                             <small class="text-muted mb-0">Wind MPH</small>
                             <div class="text-center"></div>
-                            <h6><strong><?php echo $current['wind_mph']; ?>&#176;</strong></h6>
+                            <h6><strong><?php echo $current['wind_mph']; ?></strong></h6>
                         </div>
                         <div class="d-flex flex-column block active">
                             <small class="text-muted mb-0">Degree</small>
@@ -50,18 +50,29 @@
                         <div class="d-flex flex-column block">
                             <small class="text-muted mb-0">Cloud</small>
                             <div class="text-center"></div>
-                            <h6><strong><?php echo $current['cloud']; ?>&#176;</strong></h6>
+                            <h6><strong><?php echo $current['cloud']; ?></strong></h6>
                         </div>
                         <div class="d-flex flex-column block active">
                             <small class="text-muted mb-0">UV</small>
                             <div class="text-center"></div>
-                            <h6><strong><?php echo $current['uv']; ?>&#176;</strong></h6>
+                            <h6><strong><?php echo $current['uv']; ?></strong></h6>
                         </div>
                         <div class="d-flex flex-column block last-block">
                             <small class="text-muted mb-0">Pressure</small>
                             <div class="text-center"></div>
-                            <h6><strong><?php echo $current['pressure_mb']; ?>&#176;</strong></h6>
+                            <h6><strong><?php echo $current['pressure_mb']; ?></strong></h6>
                         </div>
+                    </div>
+                    <div class="row d-flex px-3 mt-auto">
+                    <?php if ( ! empty( $endpoints ) ) : ?>
+                        <?php foreach ( $endpoints as $api => $label ) : ?>
+                            <div id="<?php echo $api; ?>-clickable" class="d-flex flex-column block button-block boardings" onclick="doRequest( '<?php echo $api; ?>', '<?php echo $input; ?>', this.id )">
+                                <small class="text-muted mb-0"><?php echo $label; ?></small>
+                                <div class="text-center" id="<?php echo $api; ?>-board"></div>
+                                <h6></h6>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -77,7 +88,21 @@
                 icon: 'error',
                 confirmButtonText: 'Cool'
             });
-        </script>    
+        </script>
+        <?php else : ?>
+        <script>
+            function doRequest(endpoint, input, id) {
+                // document.getElementById( id ).style.pointerEvents = 'none';
+                document.getElementById( id ).classList.add("active");
+                const xhttp = new XMLHttpRequest();
+                var params = 'endpoint='+endpoint+'&input=' + input;
+                xhttp.onload = function() {
+                    document.getElementById( endpoint + '-board' ).innerHTML = this.responseText;
+                }
+                xhttp.open("GET", "/weather/request?" + params);
+                xhttp.send();
+            }
+        </script> 
     <?php endif; ?>
     <footer>
         <style>
@@ -94,7 +119,6 @@
                 background-repeat: no-repeat;
             }
             .card {
-                width: 400px;
                 background-color: #F3E5F5;
             }
             .btn-primary {
@@ -104,10 +128,24 @@
             }
         
             .block {
-                width: 20%;
+                width : 20%;
                 background-color: #E1BEE7;
                 cursor: pointer;
                 padding: 10px 0px;
+            }
+
+            .boardings {
+                margin : 20px;
+                width: 20%;
+            }
+            
+            .button-block {
+                width:30%;
+                color: #ffffff;
+                border-radius:2px;
+            }
+            .text-muted {
+                color : #000000 !important;
             }
         
             .first-block {
@@ -116,6 +154,11 @@
         
             .last-block {
                 border-bottom-right-radius: 5px;
+            }
+
+            .boardings.active {
+                max-height: 200px;
+                overflow-y: scroll;
             }
         
             .block.active, .block:hover {
