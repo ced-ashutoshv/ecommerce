@@ -96,15 +96,6 @@ $container->set(
 
 $application = new Application($container);
 
-$eventsManager = new EventsManager();
-
-$eventsManager->attach(
-    'application:beforeHandleRequest',
-    new AuthManager()
-);
-
-$application->setEventsManager($eventsManager);
-
 try {
     // Handle the request
     $response = $application->handle(
