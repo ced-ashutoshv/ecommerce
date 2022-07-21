@@ -14,6 +14,8 @@ class SpotifyController extends Controller {
     const redirectUri = 'http://localhost:8080/spotify/callback';
 
     public function indexAction() {
+        $tokens = new Tokens();
+        $this->view->tokens  = $tokens->find();
         $this->view->success = $this->request->get( 'success' );
     }
 

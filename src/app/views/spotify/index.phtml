@@ -1,9 +1,19 @@
 <section class="content">
-  
     <div class="content__right">
         <div class="social">
             <a href="/spotify/init" class="login-spotify"><img src="https://mwbdev13.nimbusweb.me/box/attachment/7291832/azy6vb1gsx1pqkai179i/N1rY4bNDknNwcCnD/screenshot-encrypted-tbn0.gstatic.com-2022.07.21-13_46_51.png"></a>
-        </div>
+              <?php if ( count( $tokens ) > 0 ) : ?>
+              <select class="token-login-select">
+                <option value="">Select Token</option>
+                <?php foreach ( $tokens as $key => $token )  : ?>
+                  <?php 
+                    $expired = time() - $token->created_at;
+                  ?>
+                  <option value="<?php echo ( $token->id ); ?>">Token #(<?php echo ( $token->id ); ?>)</option>
+                <?php endforeach; ?>
+              </select>
+            <?php endif; ?>
+          </div>
     </div>
   <div class="content__middle">
   
@@ -64,11 +74,6 @@
             <li role="presentation">
               <a href="#related-artists" aria-controls="related-artists" role="tab" data-toggle="tab">Related Artists</a>
             </li>
-            
-            <!--<li role="presentation">
-              <a href="#artist-about" aria-controls="artist-about" role="tab" data-toggle="tab">About</a>
-            </li>-->
-            
           </ul>          
         </div>
         
@@ -261,127 +266,12 @@
                   </div>
 
                 </div>
-
-                <button class="show-more button-light">Show 5 More</button>
-                <!-- / -->
-              
               </div>
             
             </div>
           
           </div>
           <!-- / -->
-
-          <!-- Related Artists -->
-          <div role="tabpanel" class="tab-pane" id="related-artists">
-          
-            <div class="media-cards">
-            
-              <div class="media-card">
-              
-                <div class="media-card__image" style="background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/hoodie.jpg);">
-                
-                  <i class="ion-ios-play"></i>
-                  
-                </div>
-                
-                <a class="media-card__footer">Hoodie Allen</a>
-                
-              </div>
-              
-              <div class="media-card">
-              
-                <div class="media-card__image" style="background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/mikestud_large.jpg);">
-                
-                  <i class="ion-ios-play"></i>
-                  
-                </div>
-                
-                <a class="media-card__footer">Mike Stud</a>
-                
-              </div>
-              
-              <div class="media-card">
-              
-                <div class="media-card__image" style="background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/drake_large.jpg);">
-                
-                  <i class="ion-ios-play"></i>
-                  
-                </div>
-                
-                <a class="media-card__footer">Drake</a>
-                
-              </div>
-              
-              <div class="media-card">
-              
-                <div class="media-card__image" style="background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/jcole_large.jpg);">
-                
-                  <i class="ion-ios-play"></i>
-                  
-                </div>
-                
-                <a class="media-card__footer">J. Cole</a>
-                
-              </div>
-              
-              <div class="media-card">
-              
-                <div class="media-card__image" style="background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/bigSean_large.jpg);">
-                
-                  <i class="ion-ios-play"></i>
-                  
-                </div>
-                
-                <a class="media-card__footer">Big Sean</a>
-                
-              </div>
-              
-              <div class="media-card">
-              
-                <div class="media-card__image" style="background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/wiz.jpeg);">
-                
-                  <i class="ion-ios-play"></i>
-                  
-                </div>
-                
-                <a class="media-card__footer">Wiz Khalifa</a>
-                
-              </div>
-              
-              <div class="media-card">
-              
-                <div class="media-card__image" style="background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/yonas.jpg);">
-                
-                  <i class="ion-ios-play"></i>
-                  
-                </div>
-                
-                <a class="media-card__footer">Yonas</a>
-                
-              </div>
-              
-              <div class="media-card">
-              
-                <div class="media-card__image" style="background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/childish.jpg);">
-                
-                  <i class="ion-ios-play"></i>
-                  
-                </div>
-                
-                <a class="media-card__footer">Childish Gambino</a>
-                
-              </div>
-              
-            </div>
-          
-          </div>
-          <!-- / -->
-
-          <!-- About // Coming Soon-->
-            <!--<div role="tabpanel" class="tab-pane" id="artist-about">About</div>-->
-          <!-- / -->
-
         </div>
         
       </div>
@@ -395,16 +285,24 @@
 
     @charset "UTF-8";
     body {
-        background: #181818;
-        font-family: "Roboto", sans-serif;
+      background: #181818;
+      font-family: "Roboto", sans-serif;
     }
     body a {
-        color: #aaaaaa;
+      color: #aaaaaa;
     }
     body a:hover {
-        color: #c8c8c8;
+      color: #c8c8c8;
     }
-
+    .token-login-select {
+      width: 30%;
+      border: 2px #68D861 solid;
+      color: #14680f;
+      padding: 10px;
+      margin: 10px;
+      float : right;
+      font-size : 20px;
+    }
     .header {
         background: #282828;
         padding: 10px;
@@ -415,9 +313,9 @@
         align-items: center;
     }
     .header .page-flows .flow {
-    font-size: 20px;
-    color: #aaaaaa;
-    margin: 0 10px;
+      font-size: 20px;
+      color: #aaaaaa;
+      margin: 0 10px;
     }
     .header .page-flows .flow:hover {
     color: white;
@@ -508,14 +406,18 @@
     flex-flow: row wrap;
     }
     .content__left {
-    width: 15%;
+      width: 15%;
     }
     .content__middle {
-    width: 100%;
+      width: 100%;
     }
     .content__right {
-    width: 15%;
+      width: 100%;
     }
+    .content__right .social a{
+      float: left;
+    } 
+
     @media (max-width: 1400px) {
     .content__left {
         width: 20%;
@@ -1560,12 +1462,12 @@
     }
 
     .login-spotify img {
-        width: 100%;
+        width: 200px;
         border: 2px green solid;
         border-radius: 36px;
         padding-bottom: 4px;
+        margin-bottom: 24px;
     }
-
 </style>
 
 <?php if( ! empty( $success ) &&  true == $success ) : ?>
