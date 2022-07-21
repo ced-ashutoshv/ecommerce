@@ -12,6 +12,9 @@ class SpotifyController extends Controller {
     const authEndpoint = '/authorize'; 
     const tokenEndpoint = '/api/token';
     const redirectUri = 'http://localhost:8080/spotify/callback';
+    const webApiUrl = 'https://api.spotify.com/v1';
+
+    private $tokenId = false;
 
     public function indexAction() {
         $tokens = new Tokens();
@@ -19,7 +22,12 @@ class SpotifyController extends Controller {
         $this->view->success = $this->request->get( 'success' );
         $this->view->t       = $this->request->get( 't' );
 
-        $token = $this->validateToken( $this->view->t );
+        $this->validateToken( $this->view->t );
+        $this->tokenId = $this->view->t;
+        $this->view->me = $this->fetchMe();
+
+        $user_id = $this->view->me['id'];
+        $this->view->playlists = $this->fetchPlaylists( $user_id );
     }
 
     public function callbackAction(){
@@ -188,5 +196,60 @@ class SpotifyController extends Controller {
         }
 
         return $token;
+    }
+
+    public function doRequest( $url = '', $method = 'GET', $fields = array() ) {
+        if ( ! empty( $this->tokenId ) ) {
+
+            if ( ! empty( $fields ) ) {
+                $postFields = http_build_query($fields, '', '&');
+            }
+
+            $access_token = Tokens::findFirst( $this->tokenId )->access_token;
+
+            $curl     = curl_init();
+            curl_setopt_array(
+                $curl, array(
+                    CURLOPT_URL => $url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_CUSTOMREQUEST => $method,
+                    CURLOPT_POSTFIELDS => $postFields ?? array(),
+                    CURLOPT_HTTPHEADER => array(
+                        'Content-Type: Content-Type: application/json',
+                        'Authorization: Bearer ' . $access_token,
+                    ),
+                )
+            );
+            
+            $response = curl_exec( $curl );
+            curl_close($curl);
+            $result = json_decode( $response, true );
+
+            if ( ! empty( $result[ 'error' ] ) ) {
+                
+                // Delete this token.
+                if ( 'Refresh token revoked' === $result['error_description'] ) {
+                    $token = Tokens::delete( $this->tokenId );
+                }
+
+                $err = new Exception( $result[ 'error_description' ], 500 );
+                HttpManager::sendErrResponse( $err );
+            }
+
+            else {
+                return $result;
+            }
+        }
+    }
+
+    public function fetchMe() {
+        $url = self::webApiUrl . '/me';
+        return $this->doRequest( $url, 'GET' );
+    }
+
+    public function fetchPlaylists( $id = null ) {
+        $url = self::webApiUrl . '/users/'. $id .'/playlists';
+        $playlists = $this->doRequest( $url, 'GET' );
+        $apiUrl = $playlists['href'] ?? '';
     }
 }
