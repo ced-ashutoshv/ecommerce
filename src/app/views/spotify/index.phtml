@@ -3,13 +3,20 @@
         <div class="social">
             <a href="/spotify/init" class="login-spotify"><img src="https://mwbdev13.nimbusweb.me/box/attachment/7291832/azy6vb1gsx1pqkai179i/N1rY4bNDknNwcCnD/screenshot-encrypted-tbn0.gstatic.com-2022.07.21-13_46_51.png"></a>
               <?php if ( count( $tokens ) > 0 ) : ?>
-              <select class="token-login-select">
+              <select id="token-login" onchange="redirectWithToken(this.id)" class="token-login-select">
                 <option value="">Select Token</option>
                 <?php foreach ( $tokens as $key => $token )  : ?>
-                  <?php 
-                    $expired = time() - $token->created_at;
+                  <?php
+                    $created_at = $token->created_at;
+                    $expired = ( $created_at + 3600 ) - time();
+                    if( $expired < 0 ) { 
+                      $expired = 'Expired';
+                    } else {
+                      $expired = intval( $expired / 60 ) . ' mins left for expiration';
+                    }
+
                   ?>
-                  <option value="<?php echo ( $token->id ); ?>">Token #(<?php echo ( $token->id ); ?>)</option>
+                  <option <?php echo ( $token->id === $t ? 'selected' : '' ); ?> <?php echo ( $expired === 'Expired' ? 'disabled' : '' ); ?> value="<?php echo ( $token->id ); ?>">Token #<?php echo ( $token->id ); ?>(<?php echo ( $expired ); ?> )</option>
                 <?php endforeach; ?>
               </select>
             <?php endif; ?>
@@ -1486,3 +1493,10 @@
     })
   </script>
 <?php endif; ?>
+  <script>
+
+    function redirectWithToken(id) {
+      select = document.getElementById( id );
+      window.location.href = '/spotify/?t=' + select.value;
+    }
+  </script>
