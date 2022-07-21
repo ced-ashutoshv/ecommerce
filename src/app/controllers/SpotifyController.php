@@ -17,7 +17,7 @@ class SpotifyController extends Controller {
         $tokens = new Tokens();
         $this->view->tokens  = $tokens->find();
         $this->view->success = $this->request->get( 'success' );
-        $this->view->t       = $this->request->get( 't' );..
+        $this->view->t       = $this->request->get( 't' );
 
         $token = $this->validateToken( $this->view->t );
     }
