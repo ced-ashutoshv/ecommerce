@@ -207,10 +207,30 @@ class SpotifyController extends Controller {
 
     public function searchAction() {
         $this->view->t = $this->request->get( 't' );
+
+        if ( empty( $this->view->t ) ) {
+            $err = new Exception( 'No token authentication found', 301 );
+            HttpManager::sendErrResponse( $err );
+        }
+
         $this->validateToken( $this->view->t );
         $token                    = Tokens::findFirst( $this->view->t );
         $this->view->access_token = $token->access_token;
         $this->view->filters = self::filters;
+    }
+
+    public function playlistCreateAction() {
+
+        $this->view->t = $this->request->get( 't' );
+
+        if ( empty( $this->view->t ) ) {
+            $err = new Exception( 'No token authentication found', 301 );
+            HttpManager::sendErrResponse( $err );
+        }
+
+        $this->validateToken( $this->view->t );
+        $token                    = Tokens::findFirst( $this->view->t );
+        $this->view->access_token = $token->access_token;
     }
 
     public function resultAction() {

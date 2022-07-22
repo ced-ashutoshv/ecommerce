@@ -21,6 +21,7 @@
                 <option <?php echo ( $token->id === $t ? 'selected' : '' ); ?> value="<?php echo ( $token->id ); ?>">Token #<?php echo ( $token->id ); ?>(<?php echo ( $expired ); ?> )</option>
               <?php endforeach; ?>
             </select>
+            <a href="/spotify/playlist_create/?t=<?php echo $t; ?>" class="token-login-select search-basic">Create a new Playlist</a>
           <?php endif; ?>
           <a href="/spotify/search/?t=<?php echo $t; ?>" class="token-login-select search-basic">Click To search</a>
         </div>
