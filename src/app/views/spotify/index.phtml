@@ -58,155 +58,36 @@
               <div class="overview__artist">
 
                 <!-- Popular-->
-                <div class="section-title">Popular</div>
-
+                <div class="section-title">My Playlists</div>
                 <div class="tracks">
-
+                  
+                  <?php if ( $playlists ) : ?>
+                  <?php foreach ( $playlists as $key => $items ) : ?>
                   <div class="track">
-
                     <div class="track__art">
-
-                      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/whenDarkOut.jpg" alt="When It's Dark Out" />
-
+                      <img src="<?php echo $items['images'][0]['url'] ?? 'https://img.freepik.com/premium-vector/one-line-drawing-headphone-speaker-device-gadget-continuous-lineart-design_676691-1460.jpg?w=500'; ?>" alt="Playlists icon" />
                     </div>
-
-                    <div class="track__number">1</div>
-
+                    <div class="track__number"><?php echo( ++$key ); ?></div>
                     <div class="track__added">
-
                       <i class="ion-checkmark-round added"></i>
-
                     </div>
-
-                    <div class="track__title">Me, Myself & I</div>
-
+                    <div class="track__title"><?php echo( $items['name'] ); ?></div>
                     <div class="track__explicit">
-
-                      <span class="label">Explicit</span>
-
+                      <span class="label"><a target="__blank" href="<?php echo $items['external_urls']['spotify']; ?>">Go to playlist</a></span>
+                      <span class="label"><a onclick="showTracks('<?php echo $items['tracks']['href']; ?>', '<?php echo $items['id']?>')" href="javascript:void(0)">Show Tracks</a></span>
                     </div>
-
-                    <div class="track__plays">147,544,165</div>
-
+                    <div class="track__plays"><?php echo $items['tracks']['total'] ?? 0; ?> Songs available</div>
                   </div>
-
+                  <div class="track__result" id="dashboard-playlist-id-<?php echo $items['id']?>"></div>
+                  <?php endforeach; ?>
+                  <?php else : ?>
                   <div class="track">
-
-                    <div class="track__art">
-
-                      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/tth.jpg" alt="These Things Happen" />
-
-                    </div>
-
-                    <div class="track__number">2</div>
-
-                    <div class="track__added">
-
-                      <i class="ion-plus not-added"></i>
-
-                    </div>
-
-                    <div class="track__title">I Mean It</div>
-
-                    <div class="track__explicit">
-
-                      <span class="label">Explicit</span>
-
-                    </div>
-
-                    <div class="track__plays">74,568,782</div>
-
+                    <div class="track__title">No Playlists found</div>
                   </div>
-
-                  <div class="track">
-
-                    <div class="track__art">
-
-                      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/whenDarkOut.jpg" alt="When It's Dark Out" />
-
-                    </div>
-
-                    <div class="track__number">3</div>
-
-                    <div class="track__added">
-
-                      <i class="ion-checkmark-round added"></i>
-
-                    </div>
-
-                    <div class="track__title">Calm Down</div>
-
-                    <div class="track__explicit">
-
-                      <span class="label">Explicit</span>
-
-                    </div>
-
-                    <div class="track__plays">13,737,506</div>
-
-                  </div>
-
-                  <div class="track">
-
-                    <div class="track__art">
-
-                      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/whenDarkOut.jpg" alt="When It's Dark Out" />
-
-                    </div>
-
-                    <div class="track__number">4</div>
-
-                    <div class="track__added">
-
-                      <i class="ion-plus not-added"></i>
-
-                    </div>
-
-                    <div class="track__title">Some Kind Of Drug</div>
-
-                    <div class="track__explicit">
-
-                      <span class="label">Explicit</span>
-
-                    </div>
-
-                    <div class="track__plays">12,234,881</div>
-
-                  </div>
-
-                  <div class="track">
-
-                    <div class="track__art">
-
-                      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/tth.jpg" alt="These Things Happen" />
-
-                    </div>
-
-                    <div class="track__number">5</div>
-
-                    <div class="track__added">
-
-                      <i class="ion-checkmark-round added"></i>
-
-                    </div>
-
-                    <div class="track__title">Let's Get Lost</div>
-
-                    <div class="track__explicit">
-
-                      <span class="label">Explicit</span>
-
-                    </div>
-
-                    <div class="track__plays">40,882,954</div>
-
-                  </div>
-
+                  <?php endif; ?>
                 </div>
               </div>
-            
             </div>
-          
           </div>
           <!-- / -->
         </div>
@@ -227,6 +108,7 @@
     }
     body a {
       color: #aaaaaa;
+      text-decoration:none;
     }
     body a:hover {
       color: #c8c8c8;
@@ -1036,11 +918,13 @@
     text-decoration: underline;
     }
     .tracks .track__explicit .label {
-    border: 1px;
-    border-style: solid;
-    border-color: #424242;
-    color: #424242;
-    text-transform: uppercase;
+      border: 1px;
+      border-style: solid;
+      padding: 5px;
+      border-color: #424242;
+      color: #424242;
+      text-transform: uppercase;
+      border-radius: 11px;
     }
     .tracks .track__plays {
     color: #aaaaaa;
@@ -1428,5 +1312,52 @@
     function redirectWithToken(id) {
       select = document.getElementById( id );
       window.location.href = '/spotify/?t=' + select.value;
+    }
+
+    function showTracks( url, playlistId ) {
+
+      let access_token = '<?php echo $access_token; ?>';
+      var myHeaders = new Headers();
+      myHeaders.append("Authorization", "Bearer " + access_token);
+      myHeaders.append("Content-Type", "Content-Type: application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      fetch( url, requestOptions)
+      .then(response => response.text())
+      .then(
+        result => {
+          playlist = JSON.parse( result );
+          if ( playlist.items ) {
+
+            var trackHeader = new Headers();
+            trackHeader.append("Content-Type", "Content-Type: application/json");
+            trackHeader.append( "playlist-id", playlistId );
+            var requestOptions = {
+              method: 'POST',
+              headers: trackHeader,
+              redirect: 'follow',
+              body: result 
+            };
+
+            let url = "/spotify/tracks"
+            fetch( url, requestOptions )
+            .then(response => response.text())
+            .then(
+              result => {
+                document.getElementById( 'dashboard-playlist-id-' + playlistId ).innerHTML = result;
+                console.log( 'dashboard-playlist-id-' + playlistId );
+              }
+            )
+            .catch(error => console.log('error', error));
+          }
+          return true;
+        }
+      )
+      .catch(error => console.log('error', error));
     }
   </script>

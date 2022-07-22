@@ -13,6 +13,27 @@ class SpotifyController extends Controller {
     const tokenEndpoint = '/api/token';
     const redirectUri = 'http://localhost:8080/spotify/callback';
     const webApiUrl = 'https://api.spotify.com/v1';
+    const scopes = array(
+        'ugc-image-upload',
+        'user-modify-playback-state',
+        'user-read-playback-state',
+        'user-read-currently-playing',
+        'user-follow-modify',
+        'user-follow-read',
+        'user-read-recently-played',
+        'user-read-playback-position',
+        'user-top-read',
+        'playlist-read-collaborative',
+        'playlist-modify-public',
+        'playlist-read-private',
+        'playlist-modify-private',
+        'app-remote-control',
+        'streaming',
+        'user-read-email',
+        'user-read-private',
+        'user-library-modify',
+        'user-library-read',
+    );
 
     private $tokenId = false;
 
@@ -23,11 +44,12 @@ class SpotifyController extends Controller {
         $this->view->t       = $this->request->get( 't' );
 
         $this->validateToken( $this->view->t );
-        $this->tokenId = $this->view->t;
-        $this->view->me = $this->fetchMe();
-
-        $user_id = $this->view->me['id'];
-        $this->view->playlists = $this->fetchPlaylists( $user_id );
+        $this->tokenId            = $this->view->t;
+        $token                    = Tokens::findFirst( $this->tokenId );
+        $this->view->access_token = $token->access_token;
+        $this->view->me           = $this->fetchMe();
+        $user_id                  = $this->view->me['id'];
+        $this->view->playlists    = $this->fetchPlaylists( $user_id );
     }
 
     public function callbackAction(){
@@ -108,11 +130,72 @@ class SpotifyController extends Controller {
             'response_type' => 'code',
             'redirect_uri' => 'http://localhost:8080/spotify/callback',
             'state' => 'cedcommerce-auth',
-            'scope' => 'user-modify-playback-state user-read-private user-read-email'
+            'scope' => implode( ' ', self::scopes )
         );
-        
+
         $url = self::baseUrl . self::authEndpoint .  '?' . http_build_query($data, '', '&');
         $this->response->redirect( $url );
+    }
+
+    public function tracksAction() {
+
+        $request    = new Request();
+        $body       = $request->getRawBody();
+        $playlistId = $request->getHeader( 'playlist-id' );
+        $tracks  = json_decode( $body, true );
+        if( ! empty( $tracks ) && ! empty( $tracks['items'] ) ) { ?>
+            <table>
+                <tr>
+                    <th>No.</th>
+                    <th>Thumbnail</th>
+                    <th>Track Name</th>
+                    <th>Play Externally</th>
+                    <th>Remove</th>
+                </tr>
+                <?php foreach ( $tracks['items'] as $key => $track ) : ?>
+                    <?php $track = $track['track'] ?? array(); ?>
+                <tr>
+                    <td><?php echo ++$key; ?></td>
+                    <td><img class="track-img" src="<?php echo $track['album']['images'][0]['url']; ?>"></td>
+                    <td><?php echo $track['name']; ?></td>
+                    <td><a target="__blank" href="<?php echo $track['preview_url']; ?>"><img class="play-button" src="https://mwbdev13.nimbusweb.me/box/attachment/7299525/q517hmdlon7qs8xtfoxz/Y7yCTd7rMC6m9dV4/screenshot-www.freepik.com-2022.07.22-15_58_26.png"></a></td>
+                    <td><span class="required" playlist-id="playlist-remove-<?php echo $playlistId; ?>" track-id="track-remove-<?php echo $track['id']; ?>">(X)</span></td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+        <?php
+        } else {
+            ?>
+            <table>
+                <tr>
+                    <th colspan="3">No tracks found</th>
+                </tr>
+            </table>
+            <?php
+        }
+
+        ?>
+        <style>
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+                color : #ffffff;
+                text-align : center;
+            }
+            .play-button {
+                width : 30px;
+            }
+            .track-img {
+                width:100px;
+            }
+            td, th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+        </style>
+        <?php
     }
 
     public function validateToken( int $id = null ){
@@ -250,6 +333,14 @@ class SpotifyController extends Controller {
     public function fetchPlaylists( $id = null ) {
         $url = self::webApiUrl . '/users/'. $id .'/playlists';
         $playlists = $this->doRequest( $url, 'GET' );
-        $apiUrl = $playlists['href'] ?? '';
+        // Items found.
+        if ( $playlists[ 'total' ] > 0 || ! empty( $playlists[ 'items' ] ) ) {
+            return $playlists['items'];
+        } else {
+            // No playlist found.
+            return array();
+        }
+
+
     }
 }
