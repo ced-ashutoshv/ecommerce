@@ -26,3 +26,7 @@ RUN set -xe && \
     php -m
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+RUN apt-get update
+RUN apt-get install -y libcurl4-openssl-dev ssh nano pkg-config libssl-dev
+RUN pecl install mongodb xdebug && docker-php-ext-enable mongodb xdebug
