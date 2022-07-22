@@ -34,7 +34,14 @@ class SpotifyController extends Controller {
         'user-library-modify',
         'user-library-read',
     );
-
+    const filters = array(
+        'album',
+        'artist',
+        'playlist',
+        'track',
+        'show',
+        'episode',
+    );
     private $tokenId = false;
 
     public function indexAction() {
@@ -196,6 +203,29 @@ class SpotifyController extends Controller {
             }
         </style>
         <?php
+    }
+
+    public function searchAction() {
+        $this->view->t = $this->request->get( 't' );
+        $this->validateToken( $this->view->t );
+        $token                    = Tokens::findFirst( $this->view->t );
+        $this->view->access_token = $token->access_token;
+        $this->view->filters = self::filters;
+    }
+
+    public function resultAction() {
+        $request             = new Request();
+        $body                = $request->getRawBody();
+        $this->view->result  = json_decode( $body, true );
+
+        $view = new Phalcon\Mvc\View();
+
+        $view->setVar('result', $this->view->result);
+
+        $view->start();
+        $view->render( 'spotify', 'result' );
+        $view->finish();
+        echo $view->getContent();
     }
 
     public function validateToken( int $id = null ){
