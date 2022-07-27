@@ -1,0 +1,84 @@
+<article>
+  <h2>Products</h2>
+  <a href="/ecommerce/products" class="copy">Go</a>
+  <code id="html">
+    <pre>This will show the Products.</pre>
+  </code>
+</article>
+<article>
+  <h2>Orders</h2>
+  <a href="/ecommerce/orders" class="copy">Go</a>
+  <code id="js">
+    <pre>This will contain the Orders.</pre>
+  </code>
+</article>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        align-content: start;
+        background-color: hsl(255, 60%, 50%);
+        background-image: linear-gradient(hsl(255, 60%, 50%), hsl(265, 75%, 35%));
+        display: flex;
+        font-family: Helvetica, Arial, sans-serif;
+        gap: 1em;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 2em;
+    }
+    body > article{
+        background-color: #223;
+        filter: drop-shadow(-2px 3px 2px rgba(2, 0, 4, 0.4));
+    }
+    article {
+        border: 1px dashed #889;
+        color: lightskyblue;
+        /* max-width: 100ch; */
+        width: 48%;
+        padding: 1.2rem;
+        position: relative;
+        float: left;
+        margin: 10px;
+    }
+    .copy {
+        border: 1px solid salmon;
+        background-color: black;
+        color: snow;
+        text-decoration:none;
+        cursor: pointer;
+        padding: 0.5em 0.8em;
+        position: absolute;
+        right: 1em;
+        top: 1em;
+    }
+    .copy:hover {
+        background-color: #334;
+    }
+    h2 {
+        color: salmon;
+        margin-bottom: 0.5em;
+    }
+    input {
+        background-color: #141018;
+        border: 0.5px solid salmon;
+        color: snow;
+        padding: 3px 8px;
+    }
+    input:first-of-type {
+        margin-right: 1em;
+    }
+    pre {
+        background-color: hsl(270, 25%, 10%);
+        font-family: FantasqueSansMono Nerd Font, VictorMono Nerd Font,
+            JetBrainsMono Nerd Font, Fira Code, Monospace;
+        font-size: 1em;
+        line-height: 1.2em;
+        max-height: 20vh;
+        overflow-y: scroll;
+        padding: 0.5rem;
+    }
+
+</style>
