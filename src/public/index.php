@@ -36,7 +36,7 @@ $loader->registerFiles(
         '../app/includes/query-manager.php',
         '../app/includes/crud-manager.php',
         '../app/includes/auth-manager.php',
-        '../app/bin/vendor/autoload.php',
+        '../app/lib/vendor/autoload.php',
     ]
 );
 
@@ -65,14 +65,14 @@ $container->set(
 $container->set(
     'db',
     function () {
-        return new Mysql(
-            [
-                'host'     => 'mysql-server',
-                'username' => 'root',
-                'password' => 'secret',
-                'dbname'   => 'ecommerce',
-            ]
+        require '../app/etc/config.php';
+        $config = new Config( $settings );
+        $client = new MongoDB\Client(
+            'mongodb+srv://' . $config->db->get( 'username' ) . ':' . $config->db->get( 'password' ) . '@' . $config->db->get( 'cluster' ) . '/?retryWrites=true&w=majority'
         );
+
+        $cluster = $config->db->get( 'db_name' );
+        return $client->$cluster;
     }
 );
 

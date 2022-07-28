@@ -15,6 +15,16 @@ class IndexController extends Controller {
         $translation         = $this->getTranslator();
         $this->view->myName  = $translation->query( 'name' );
         $this->view->appName = $translation->query( 'app' );
+
+        $conn = $this->di->get( 'db' );
+
+        $collections = $conn->products;
+
+        foreach ( $collections->find() as $document) {
+            echo $document['_id'] . '<br>';
+        }
+        die;
+        // echo '<pre>'; print_r( $collections->find() ); echo '</pre>'; die;
     }
 
     /**
