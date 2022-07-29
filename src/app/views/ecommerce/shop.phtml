@@ -1,0 +1,78 @@
+<html>
+    <head>
+        <title>
+            Welcome to Shop
+        </title>
+    </head>
+    <body>
+    <table id="products" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Meta</th>
+                <th>Variations</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Meta</th>
+                <th>Variations</th>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr>
+                <td>Cara Stevens</td>
+                <td>Sales Assistant</td>
+                <td>New York</td>
+                <td>46</td>
+                <td>2011/12/06</td>
+                <td>$145,600</td>
+            </tr>
+        </tbody>
+    </table>
+    </body>
+    <footer>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+        <style>
+            body {
+                margin: 2rem;
+            }
+            table, thead, tfoot {
+                margin: 2rem;
+                text-align:center;
+            }
+            .paginate_button {
+                border-radius: 0 !important;
+            }
+        </style>
+        <script>
+
+            jQuery(document).ready(function($) {
+
+                var table = $('#products').DataTable({ 
+                    ajax: 'product',
+                    columns: [
+                        { data: 'id' },
+                        { data: 'name' },
+                        { data: 'category' },
+                        { data: 'price' },
+                        { data: 'stock' },
+                        { data: 'meta' },
+                        { data: 'variations' },
+                    ],
+                });
+            });
+        </script>
+    </footer>
+</html>

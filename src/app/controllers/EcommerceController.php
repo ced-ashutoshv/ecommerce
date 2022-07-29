@@ -9,11 +9,19 @@ class EcommerceController extends Controller {
         
     }
 
-    public function productsAction(){
+    public function productAction(){
 
+        $products = new Products();
+        $products = $products->getAll() ?? array( '', 'No', 'Product', 'Found', 'in', 'this', 'Database' );
+        $result   = array(
+            'data'  =>  $products
+        );
+        echo json_encode( $result );
+    }
+
+    public function shopAction(){
     }
 
     public function ordersAction(){
-        
     }
 }

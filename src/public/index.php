@@ -71,8 +71,8 @@ $container->set(
             'mongodb+srv://' . $config->db->get( 'username' ) . ':' . $config->db->get( 'password' ) . '@' . $config->db->get( 'cluster' ) . '/?retryWrites=true&w=majority'
         );
 
-        $cluster = $config->db->get( 'db_name' );
-        return $client->$cluster;
+        $db = $config->db->get( 'db_name' );
+        return $client->$db;
     }
 );
 
@@ -90,7 +90,7 @@ $container->set(
             ->setAdapter($files)
             ->start();
 
-        return $session;
+        return $session;    
     }
 );
 
