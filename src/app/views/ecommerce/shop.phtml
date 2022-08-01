@@ -29,16 +29,11 @@
             </tr>
         </tfoot>
         <tbody>
-            <tr>
-                <td>Cara Stevens</td>
-                <td>Sales Assistant</td>
-                <td>New York</td>
-                <td>46</td>
-                <td>2011/12/06</td>
-                <td>$145,600</td>
-            </tr>
         </tbody>
     </table>
+    <div>
+        <a href="/ecommerce/create_product" class="button">Add New Product</a>
+    </div>
     </body>
     <footer>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
@@ -55,11 +50,34 @@
             .paginate_button {
                 border-radius: 0 !important;
             }
+            a.button {
+                color: #000000;
+                border: 2px solid #000000;
+                border-radius: 6px;
+                padding: 5px 40px;
+                text-decoration : none;
+                background: #0f0f0f33;
+            }
+            :root {
+                --hue: 223;
+                --bg: hsl(var(--hue),10%,90%);
+                --fg: hsl(var(--hue),10%,10%);
+                --primary: hsl(var(--hue),90%,55%);
+                --trans-dur: 0.3s;
+                font-size: calc(16px + (20 - 16) * (100vw - 320px) / (1280 - 320));
+            }
+            body {
+                background-color: var(--bg);
+                color: var(--fg);
+                font: 1em/1.5 "DM Sans", sans-serif;
+                place-items: center;
+                transition:
+                    background-color var(--trans-dur),
+                    color var(--trans-dur);
+            }
         </style>
         <script>
-
             jQuery(document).ready(function($) {
-
                 var table = $('#products').DataTable({ 
                     ajax: 'product',
                     columns: [

@@ -25,12 +25,14 @@ class Products extends Model {
             }
             $meta .= '</ul>';
 
-            $variations = array();
-            foreach ( $product->variations as $key => $variation ) {
-                foreach ( $variation as $meta_key => $meta_value ) {
-                    $variations[] = '<strong>' . ucwords( str_replace( '_',' ',$meta_key ) ) . '</strong> : ' . ucwords( $meta_value ) . '';
-                }
-            }
+            
+            // $variations = '<ul>';
+            // if ( ! empty( $product->variations ) ) {
+            //     echo '<pre>'; print_r( $product->variations ); echo '</pre>'; die;
+            //     foreach ( $variation as $meta_key => $meta_value ) {
+            //     }
+            // }
+            // $meta .= '</ul>';
 
             $products[]    = array(
                 'id'         =>  $product->_id->__toString() ?? '',
@@ -39,10 +41,62 @@ class Products extends Model {
                 'price'      => $product->price,
                 'stock'      => $product->stock,
                 'meta'       => $meta,
-                'variations' => $variations,
+                'variations' => '$variations',
             );
         }
 
         return $products;
+    }
+
+    public function validatedData( array $formData = array(), string $action = 'create' ) {
+        $err = null;
+        foreach ( $formData as $key => $value ) {
+            switch ($key) {
+                case 'id':
+                    if ( 'update' === $action && empty( $formData['id'] ) ) {
+                        $err = new Exception( 'Bad Request : Id field is mandatory for update', 400 );
+                    }
+                    break;
+                case 'name':
+                case 'category':
+                    if ( empty( $formData[$key] ) ) {
+                        $err = new Exception( 'Bad Request : ' . ucwords($key) . ' field is mandatory for update', 400 );
+                    }
+                    break;
+                case 'price':
+                case 'stock':
+                    if ( empty( $formData[$key] ) ) {
+                        $err = new Exception( 'Bad Request : ' . ucwords($key) . ' field is mandatory for update', 400 );
+                    } elseif ( ! empty( $formData[$key] ) && ! is_numeric( $formData[$key] ) ) {
+                        $err = new Exception( 'Bad Request : ' . ucwords($key) . ' field is not numeric', 400 );
+                    }
+                    break;
+            }
+
+            if ( ! empty( $err ) ) {
+                break;
+            }
+        }
+
+        if ( ! empty( $err ) ) {
+            throw $err;
+        }
+    }
+
+    public function prepareRequest( array $formData = array() ) {
+
+        if ( array_key_exists( 'meta', $formData ) && ! empty( $formData['meta'] ) ) {
+            $formData[ 'meta' ] = array_combine( $formData[ 'meta' ]['meta_key'], $formData[ 'meta' ]['meta_value'] );
+        }
+
+        return $formData;
+    }
+
+    public function createNew( array $formData = array() ) {
+
+        $dbConnection = $this->di->get( 'db' );
+        $collection   = $this->collection;
+        $result       = $dbConnection->$collection->insertOne( $formData );
+        return $result;
     }
 }
