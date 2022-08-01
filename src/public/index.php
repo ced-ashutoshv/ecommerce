@@ -1,15 +1,10 @@
 <?php
 
-use Phalcon\Di\FactoryDefault;
+use Phalcon\Url;
 use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
-use Phalcon\Url;
-use Phalcon\Config;
-use Phalcon\Db\Adapter\Pdo\Mysql;
-use Phalcon\Di;
-use Phalcon\Session\Manager;
-use Phalcon\Session\Adapter\Stream;
+use Phalcon\Di\FactoryDefault;
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
@@ -52,7 +47,7 @@ $application = new Application($container);
 try {
     // Handle the request
     $response = $application->handle(
-        $_SERVER["REQUEST_URI"]
+        $_SERVER['REQUEST_URI']
     );
 
     $response->send();
