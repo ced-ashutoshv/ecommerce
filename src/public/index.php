@@ -64,30 +64,12 @@ $container->set(
             ]
         );
 
-
         $router->add(
             '/admin',
             [
                 'module'     => 'back',
                 'controller' => 'admin',
                 'action'     => 'index',
-            ]
-        );
-
-        $router->add(
-            '/admin/products/:action',
-            [
-                'module'     => 'back',
-                'controller' => 'products',
-                'action'     => 1,
-            ]
-        );
-
-        $router->add(
-            '/products/:action',
-            [
-                'controller' => 'products',
-                'action'     => 1,
             ]
         );
 

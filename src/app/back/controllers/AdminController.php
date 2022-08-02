@@ -3,7 +3,7 @@
 namespace Multi\Back\Controllers;
 use Phalcon\Mvc\Controller;
 
-class IndexController extends Controller {
+class AdminController extends Controller {
     public function indexAction() {
     }
 }
