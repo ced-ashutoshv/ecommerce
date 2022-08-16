@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit bootstrap="/var/www/html/app/phpunit.php" backupGlobals="false" backupStaticAttributes="false" verbose="true" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false" stopOnFailure="false" syntaxCheck="true">
+</phpunit>
