@@ -11,12 +11,11 @@ class WeatherControllerTest extends AbstractUnitTest {
      * @test
      */
     public function indexAction(): void {
-        require '/var/www/html/app/controllers/WeatherController.php';
         $controller = new \WeatherController();
         $controller->view = new View();
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_REQUEST = array(
-            'q' =>  'USA'
+            'q' =>  'india'
         );
         $result = $controller->indexAction();
         $this->assertEquals(

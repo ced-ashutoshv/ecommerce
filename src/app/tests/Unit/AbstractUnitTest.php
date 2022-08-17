@@ -8,6 +8,11 @@ use Phalcon\Di;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Incubator\Test\PHPUnit\UnitTestCase;
 use PHPUnit\Framework\IncompleteTestError;
+use Phalcon\Loader;
+use Phalcon\Mvc\View;
+use Phalcon\Mvc\Application;
+
+define( 'APP_PATH', '/var/www/html/app/' );
 
 abstract class AbstractUnitTest extends UnitTestCase
 {
@@ -16,12 +21,24 @@ abstract class AbstractUnitTest extends UnitTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $di = new FactoryDefault();
+        $di->set(
+            'loader',
+            function () {
+                $loader = new Loader();
+                return $loader;
+            }
+        );
+        $loader = $di['loader'];
+        $loader->registerDirs(
+            [
+                '/var/www/html/app/controllers/',
+                '/var/www/html/app/models/',
+            ]
+        );
 
-        Di::reset();
-        Di::setDefault($di);
-
+        $loader->register();
+        $this->setDi($di);
         $this->loaded = true;
     }
 
