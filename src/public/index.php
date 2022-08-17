@@ -36,7 +36,7 @@ $loader->registerFiles(
         '../app/includes/query-manager.php',
         '../app/includes/crud-manager.php',
         '../app/includes/auth-manager.php',
-        '../app/vendor/autoload.php',
+        '../app/bin/vendor/autoload.php',
     ]
 );
 
@@ -117,4 +117,4 @@ try {
     $response
         ->setJsonContent($contents, JSON_PRETTY_PRINT, 512)
         ->send();
-} 
+}
