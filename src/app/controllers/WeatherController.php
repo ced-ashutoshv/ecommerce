@@ -34,16 +34,21 @@ class WeatherController extends Controller {
                     $report = self::fetch( 'current', $input );
                 } catch (\Throwable $th) {
                     $this->view->err = $th->getMessage();
-                    return;
+                    return false;
                 }
                 if ( ! empty( $report ) ) {
                     $this->view->report = $report;
+                    return true;
                 } else {
                     $this->view->err = 'No result found with this country';
+                    return false;
                 }
             } else {
                 $this->view->err = 'Please enter a valid Location';
+                return false;
             }
+        } else {
+            return false;
         }
     }
 
@@ -203,7 +208,6 @@ class WeatherController extends Controller {
 
         } else {
             throw new Exception( "Error Processing Request", 401 );
-            
         }
     }
 }
