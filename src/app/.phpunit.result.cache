@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Tests\\Unit\\UnitTest::testTestCase":5,"Warning":6,"Tests\\Unit\\WeatherControllerTest::indexAction":4},"times":{"Tests\\Unit\\UnitTest::testTestCase":0.002,"Tests\\Unit\\WeatherControllerTest::testTestCase":0.003,"Warning":0.001,"Tests\\Unit\\WeatherControllerTest::IndexAction":0.002,"Tests\\Unit\\WeatherControllerTest::indexAction":0.002}}

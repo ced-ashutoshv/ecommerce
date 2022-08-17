@@ -36,6 +36,7 @@ $loader->registerFiles(
         '../app/includes/query-manager.php',
         '../app/includes/crud-manager.php',
         '../app/includes/auth-manager.php',
+        '../app/vendor/autoload.php',
     ]
 );
 
