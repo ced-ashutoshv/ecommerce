@@ -13,6 +13,7 @@ use Phalcon\Session\Adapter\Stream;
 use Phalcon\Http\Response;
 use Phalcon\Events\Event;
 use Phalcon\Events\Manager as EventsManager;
+use Phalcon\Mvc\Model\Manager as ModelsManager;
 
 // Define some absolute path constants to aid in locating resources
 define( 'BASE_PATH', dirname(__DIR__) );
@@ -49,6 +50,13 @@ $container->set(
         $view = new View();
         $view->setViewsDir(APP_PATH . '/views/');
         return $view;
+    }
+);
+
+$container->set(
+    'modelsManager',
+    function() {
+        return new ModelsManager();
     }
 );
 

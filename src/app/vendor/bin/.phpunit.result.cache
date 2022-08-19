@@ -1,1 +1,1 @@
-{"version":1,"defects":{"Tests\\Unit\\WeatherControllerTest::indexAction":3,"Warning":6},"times":{"Tests\\Unit\\WeatherControllerTest::indexAction":2.074,"Warning":0.002}}
+{"version":1,"defects":{"Tests\\Unit\\WeatherControllerTest::indexAction":4,"Warning":6,"Tests\\Unit\\WeatherControllerTest::createToken":4,"Tests\\Unit\\WeatherControllerTest::createTokenAction":4},"times":{"Tests\\Unit\\WeatherControllerTest::indexAction":0.572,"Warning":0.002,"Tests\\Unit\\WeatherControllerTest::createToken":0.001,"Tests\\Unit\\WeatherControllerTest::createTokenAction":0.002}}
